@@ -9,7 +9,7 @@ lazy val `commercetools-sunrise-email` = (project in file("."))
   .settings(commonSettings ++ commonTestSettings : _*)
 
 lazy val commonSettings = releaseSettings ++ Seq (
-  scalaVersion := "2.11.7",
+  scalaVersion := "2.11.8",
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 )
 
@@ -32,10 +32,10 @@ def configTestDirs(config: Configuration, folderName: String) = Seq(
 def configCommonTestSettings(scopes: String) = Seq(
   testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
   libraryDependencies ++= Seq (
-    "org.assertj" % "assertj-core" % "3.0.0" % scopes
+    "org.assertj" % "assertj-core" % "3.4.1" % scopes
   ),
   dependencyOverrides ++= Set (
-    "junit" % "junit" % "4.12" % scopes
+    "com.novocode" % "junit-interface" % "0.11" % scopes
   )
 )
 
