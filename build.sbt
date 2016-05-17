@@ -32,10 +32,9 @@ def configTestDirs(config: Configuration, folderName: String) = Seq(
 def configCommonTestSettings(scopes: String) = Seq(
   testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
   libraryDependencies ++= Seq (
-    "org.assertj" % "assertj-core" % "3.4.1" % scopes
-  ),
-  dependencyOverrides ++= Set (
-    "com.novocode" % "junit-interface" % "0.11" % scopes
+    "com.novocode" % "junit-interface" % "0.11" % scopes,
+    "org.assertj" % "assertj-core" % "3.4.1" % scopes,
+    "com.icegreen" % "greenmail" % "1.5.0" % scopes
   )
 )
 
