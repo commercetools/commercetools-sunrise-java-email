@@ -5,9 +5,32 @@ name := "commercetools-sunrise-email"
 
 organization := "io.commercetools.sunrise"
 
+/**
+ * PROJECT DEFINITIONS
+ */
+
 lazy val `commercetools-sunrise-email` = (project in file("."))
+  .aggregate(`email-common`, `email-smtp`)
+  .settings(javaUnidocSettings ++ commonSettings : _*)
+
+lazy val `email-common` = project
   .configs(IntegrationTest)
-  .settings(javaUnidocSettings ++ commonSettings ++ commonTestSettings : _*)
+  .settings(commonSettings ++ commonTestSettings : _*)
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.google.code.findbugs" % "jsr305" % "3.0.0"
+    )
+  )
+
+lazy val `email-smtp` = project
+  .configs(IntegrationTest)
+  .settings(commonSettings ++ commonTestSettings : _*)
+  .dependsOn(`email-common`)
+
+
+/**
+ * COMMON SETTINGS
+ */
 
 lazy val commonSettings = releaseSettings ++ Seq (
   scalaVersion := "2.11.8",
