@@ -5,4 +5,4 @@ Sunrise Java Email :sunrise: :email:
 
 Module for [Sunrise Java](https://github.com/sphereio/commercetools-sunrise-java) with different supported services to send e-mail. 
 
-* [Javadoc](https://sphereio.github.io/commercetools-sunrise-java/javadoc/index.html)
+* [Javadoc](https://commercetools.github.io/commercetools-sunrise-java-email/javadoc/index.html)
