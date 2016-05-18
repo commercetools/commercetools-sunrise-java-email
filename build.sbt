@@ -1,4 +1,5 @@
 import ReleaseTransformations._
+import sbt.Keys._
 
 name := "commercetools-sunrise-email"
 
@@ -6,14 +7,13 @@ organization := "io.commercetools.sunrise"
 
 lazy val `commercetools-sunrise-email` = (project in file("."))
   .configs(IntegrationTest)
-  .settings(commonSettings ++ commonTestSettings : _*)
+  .settings(javaUnidocSettings ++ commonSettings ++ commonTestSettings : _*)
 
 lazy val commonSettings = releaseSettings ++ Seq (
   scalaVersion := "2.11.8",
+  javacOptions in (Compile, doc) := Seq("-quiet", "-notimestamp"),
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 )
-
-javaUnidocSettings
 
 /**
  * TEST SETTINGS
