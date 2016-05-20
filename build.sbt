@@ -5,6 +5,8 @@ name := "commercetools-sunrise-email"
 
 organization := "io.commercetools.sunrise"
 
+lazy val javaMailVersion = "1.5.5"
+
 /**
  * PROJECT DEFINITIONS
  */
@@ -18,13 +20,21 @@ lazy val `email-common` = project
   .settings(commonSettings ++ commonTestSettings : _*)
   .settings(
     libraryDependencies ++= Seq(
-      "com.google.code.findbugs" % "jsr305" % "3.0.0"
+      "com.google.code.findbugs" % "jsr305" % "3.0.0",
+      "javax.mail" % "javax.mail-api" % javaMailVersion withSources()
     )
   )
 
 lazy val `email-smtp` = project
   .configs(IntegrationTest)
   .settings(commonSettings ++ commonTestSettings : _*)
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.sun.mail" % "mailapi" % javaMailVersion withSources(),
+      "com.sun.mail" % "smtp" % javaMailVersion withSources(),
+      "com.sun.mail" % "dsn" % javaMailVersion withSources()
+    )
+  )
   .dependsOn(`email-common`)
 
 
