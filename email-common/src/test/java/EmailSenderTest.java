@@ -1,16 +1,11 @@
 import io.commercetools.sunrise.email.EmailSender;
-import io.commercetools.sunrise.email.MessageAuthor;
 import org.junit.Test;
 
-import javax.annotation.Nonnull;
 import javax.mail.internet.MimeMessage;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmailSenderTest {
 
@@ -18,25 +13,9 @@ public class EmailSenderTest {
 
     @Test
     public void sendAndWaitDefaultMethodDelegatesToSend() throws Exception {
-        final MessageAuthor author = mock(MessageAuthor.class);
-
-        final int timeout = 1000;
-        final TimeUnit timeUnit = TimeUnit.SECONDS;
-        final CompletableFuture completableFuture = mock(CompletableFuture.class);
-        when(completableFuture.get(timeout, timeUnit)).thenReturn(ID);
-
-        final CompletionStage completionStage = mock(CompletionStage.class);
-        when(completionStage.toCompletableFuture()).thenReturn(completableFuture);
-
-        final EmailSender sender = new EmailSender() {
-            @Nonnull
-            @Override
-            public CompletionStage<String> send(@Nonnull final MessageAuthor author) {
-                return completionStage;
-            }
-        };
-
-        assertThat(sender.sendAndWait(author, timeout, timeUnit)).isSameAs(ID);
+        final EmailSender sender = (a) -> CompletableFuture.completedFuture(ID);
+        final Consumer<MimeMessage> author = (msg) -> {};
+        assertThat(sender.sendAndWait(author)).isSameAs(ID);
     }
 
 }

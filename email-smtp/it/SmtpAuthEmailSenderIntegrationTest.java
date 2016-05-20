@@ -2,7 +2,6 @@ import io.commercetools.sunrise.email.smtp.SmtpAuthEmailSender;
 import org.junit.Test;
 
 import java.util.Properties;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,11 +13,12 @@ public class SmtpAuthEmailSenderIntegrationTest {
     @Test
     public void sendReturnsMessageID() throws Exception {
 
-        final SmtpAuthEmailSender sender = SmtpAuthEmailSender.of(new Properties());
+        final SmtpAuthEmailSender sender = new SmtpAuthEmailSender(new Properties());
 
         CompletionStage<String> completionStage = sender.send(msg -> {});
         assertThat(completionStage).isNotNull();
         // TODO: The ID should not be empty
         assertThat(completionStage.toCompletableFuture().get()).isEmpty();
     }
+
 }
