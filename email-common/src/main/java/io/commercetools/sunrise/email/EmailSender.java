@@ -46,34 +46,13 @@ public interface EmailSender {
      * wrapped in an unchecked {@link CompletionException} thrown by {@link CompletableFuture#join()}.
      * <p>Implementations of this method need to apply timeouts that may be configured when creating the {@link EmailSender}
      * instance. The timeouts avoid denial of service by too many connections waiting for stalled I/O.</p>
-     * <p>To send e-mails synchronously, use {@link #sendAndWait(Consumer)}.
      *
      * @param messageAuthor a consumer that fills the empty message created by the email sender.
      *                      Note that {@link MimeMessage} instances are not immutable. Messages passed to the consumer
      *                      must only be used by that consumer instance and must not be passed elsewhere.
      * @return A completion stage for sending the message asynchronously.
-     * @see #sendAndWait(Consumer)
      */
     @Nonnull
     CompletionStage<String> send(@Nonnull final Consumer<MimeMessage> messageAuthor);
 
-    /**
-     * Send the given message and wait for the result.
-     * <p>
-     * This method is provided as a convenience method to users who send e-mails synchronously. It is invoked in the
-     * same way as {@link #send(Consumer)}, but waits for the result.
-     *
-     * @param messageAuthor a consumer that fills the empty message created by the email sender.
-     *                      Note that {@link MimeMessage} instances are not immutable. Messages passed to the consumer
-     *                      must only be used by that consumer instance and must not be passed elsewhere.
-     * @return the ID of the successfully sent message (this method will not return otherwise)
-     * @throws CompletionException if there was an exception while sending the e-mail. The wrapped exception will be a
-     *                             {@link EmailSenderException} if the e-mail could not be sent due to issues with the
-     *                             given message or the e-mail infrastructure.
-     * @see #send(Consumer)
-     */
-    @Nonnull
-    default String sendAndWait(@Nonnull final Consumer<MimeMessage> messageAuthor) {
-        return send(messageAuthor).toCompletableFuture().join();
-    }
 }
