@@ -17,6 +17,12 @@
     catch(err) {
     }
 //-->
+var methods = {"i0":6};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 </script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -42,7 +48,7 @@
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li>Next&nbsp;Class</li>
+<li><a href="../../../../io/commercetools/sunrise/email/EmailSenderException.html" title="class in io.commercetools.sunrise.email"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../index.html?io/commercetools/sunrise/email/EmailSender.html" target="_top">Frames</a></li>
@@ -69,13 +75,13 @@
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.top">
@@ -95,9 +101,108 @@
 <dt>All Known Implementing Classes:</dt>
 <dd><a href="../../../../io/commercetools/sunrise/email/smtp/GmailSmtpEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">GmailSmtpEmailSender</a>, <a href="../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">SmtpAuthEmailSender</a></dd>
 </dl>
+<dl>
+<dt>Functional Interface:</dt>
+<dd>This is a functional interface and can therefore be used as the assignment target for a lambda expression or method reference.</dd>
+</dl>
 <hr>
 <br>
-<pre>public interface <span class="typeNameLabel">EmailSender</span></pre>
+<pre>@FunctionalInterface
+public interface <span class="typeNameLabel">EmailSender</span></pre>
+<div class="block">A service for sending e-mails.
+ <p>Instances of the e-mail service are created with a configuration such that they can later send messages
+ without requiring further credentials or configuration of servers.
+ <p>The service API is based on the Java Mail API. Note that implementations of this service might choose not to
+ <em>send</em> e-mails using the (default implementation of the) Java Mail API but to merely accept messages created
+ using the Java Mail API. You may want to consult the <a href="https://java.net/projects/javamail/pages/Home">samples,
+ JavaDocs and specification of the Java Mail API</a>.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>java.util.concurrent.CompletionStage&lt;java.lang.String&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/commercetools/sunrise/email/EmailSender.html#send-java.util.function.Consumer-">send</a></span>(java.util.function.Consumer&lt;javax.mail.internet.MimeMessage&gt;&nbsp;messageAuthor)</code>
+<div class="block">Create a completion stage that asynchronously sends an e-mail using the configuration of this e-mail
+ service.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="send-java.util.function.Consumer-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>send</h4>
+<pre>@Nonnull
+java.util.concurrent.CompletionStage&lt;java.lang.String&gt;&nbsp;send(@Nonnull
+                                                                     java.util.function.Consumer&lt;javax.mail.internet.MimeMessage&gt;&nbsp;messageAuthor)</pre>
+<div class="block">Create a completion stage that asynchronously sends an e-mail using the configuration of this e-mail
+ service. Before this method returns, the message author argument of this method is passed an empty
+ <code>MimeMessage</code> that the <a href="../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><code>EmailSender</code></a> created. The message author shall prepare the message
+ so it can be sent. Sending will happen asynchronously, though.
+ <p>
+ Refer to the <a href="https://javamail.java.net/nonav/docs/api/">Java Mail JavaDoc</a> and the
+ <a href="http://javamail.java.net/nonav/docs/JavaMail-1.5.pdf">Java Mail Specification</a> on how to configure
+ instances of <code>MimeMessage</code>. The following code shows a simple example.
+ <pre><code>
+ CompletionStage&lt;String&gt; completionStage = emailSender.send(msg -&gt; {
+      msg.setFrom("foo@domain.com");
+      msg.setSubject("Subject, "UTF-8");
+      msg.setText("Text", "UTF-8");
+      msg.setSentDate(new Date());
+      msg.setRecipients(Message.RecipientType.TO, "bar@domain.com");
+ });
+ </code></pre>
+ The <code>CompletionStage</code> returned by this method may be combined with further completion stages. To directly
+ send the email and get its message ID, obtain a completable future as in the following example.
+ <pre><code>
+ String messageID = completionStage.toCompletableFuture().join();
+ </code></pre>
+ Exceptions that occur while sending the email are instances of <a href="../../../../io/commercetools/sunrise/email/EmailSenderException.html" title="class in io.commercetools.sunrise.email"><code>EmailSenderException</code></a> that are
+ wrapped in an unchecked <code>CompletionException</code> thrown by <code>CompletableFuture.join()</code>.
+ <p>Implementations of this method need to apply timeouts that may be configured when creating the <a href="../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><code>EmailSender</code></a>
+ instance. The timeouts avoid denial of service by too many connections waiting for stalled I/O.</p></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>messageAuthor</code> - a consumer that fills the empty message created by the email sender.
+                      Note that <code>MimeMessage</code> instances are not immutable. Messages passed to the consumer
+                      must only be used by that consumer instance and must not be passed elsewhere.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A completion stage for sending the message asynchronously.</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 </div>
@@ -124,7 +229,7 @@
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li>Next&nbsp;Class</li>
+<li><a href="../../../../io/commercetools/sunrise/email/EmailSenderException.html" title="class in io.commercetools.sunrise.email"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../index.html?io/commercetools/sunrise/email/EmailSender.html" target="_top">Frames</a></li>
@@ -151,13 +256,13 @@
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.bottom">
