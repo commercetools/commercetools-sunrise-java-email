@@ -1,8 +1,8 @@
 package io.commercetools.sunrise.email;
 
 /**
- * An unchecked exception signalling that an e-mail could not be sent due to issues that arise from either the e-mail itself
- * or from the e-mail infrastructure.
+ * An unchecked exception signalling that an e-mail could not be created or not be sent due to issues that arise from
+ * either the e-mail itself or from the e-mail infrastructure.
  * <p>
  * Exceptions of this type will often wrap a lower-level exception.
  *
