@@ -69,7 +69,7 @@ public interface EmailSender {
      * }</pre>
      * <h1>A note to implementors</h1>
      * Implementations of this method need to apply timeouts that may be configured when creating the {@link EmailSender}
-     * instance. The timeouts avoid denial of service by too many connections waiting for stalled I/O.</p>
+     * instance. The timeouts avoid denial of service by too many connections waiting for stalled I/O.
      *
      * @param messageEditor the email sender passes an empty message to the message editor that the editor shall fill.
      *                      Note that {@link MimeMessage} instances are not immutable. Messages passed to the editor
