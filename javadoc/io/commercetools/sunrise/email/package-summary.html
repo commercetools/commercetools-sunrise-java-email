@@ -86,6 +86,13 @@
 <div class="block">A service for sending e-mails.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email">MessageEditor</a></td>
+<td class="colLast">
+<div class="block">A functional interface for modifying a message without needing to handle checked exceptions like the
+ <code>MessagingException</code>s thrown by <code>MimeMessage</code>.</div>
+</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -98,10 +105,22 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../io/commercetools/sunrise/email/EmailCreationException.html" title="class in io.commercetools.sunrise.email">EmailCreationException</a></td>
+<td class="colLast">
+<div class="block">An unchecked exception signalling that an e-mail could not be created or not be modified by a <a href="../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email"><code>MessageEditor</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email">EmailDeliveryException</a></td>
+<td class="colLast">
+<div class="block">An unchecked exception signalling that an e-mail could not be sent due to issues that arose from
+ either the e-mail itself or from the e-mail infrastructure.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../io/commercetools/sunrise/email/EmailSenderException.html" title="class in io.commercetools.sunrise.email">EmailSenderException</a></td>
 <td class="colLast">
-<div class="block">An unchecked exception signalling that an e-mail could not be sent due to issues that arise from either the e-mail itself
- or from the e-mail infrastructure.</div>
+<div class="block">An abstract base class for unchecked exception signalling issues related to an <a href="../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><code>EmailSender</code></a>.</div>
 </td>
 </tr>
 </tbody>

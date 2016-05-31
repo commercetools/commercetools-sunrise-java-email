@@ -47,7 +47,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../io/commercetools/sunrise/email/EmailSenderException.html" title="class in io.commercetools.sunrise.email"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -136,7 +136,7 @@ public interface <span class="typeNameLabel">EmailSender</span></pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>java.util.concurrent.CompletionStage&lt;java.lang.String&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/commercetools/sunrise/email/EmailSender.html#send-java.util.function.Consumer-">send</a></span>(java.util.function.Consumer&lt;javax.mail.internet.MimeMessage&gt;&nbsp;messageAuthor)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/commercetools/sunrise/email/EmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-">send</a></span>(<a href="../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email">MessageEditor</a>&nbsp;messageEditor)</code>
 <div class="block">Create a completion stage that asynchronously sends an e-mail using the configuration of this e-mail
  service.</div>
 </td>
@@ -156,7 +156,7 @@ public interface <span class="typeNameLabel">EmailSender</span></pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="send-java.util.function.Consumer-">
+<a name="send-io.commercetools.sunrise.email.MessageEditor-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -164,12 +164,12 @@ public interface <span class="typeNameLabel">EmailSender</span></pre>
 <h4>send</h4>
 <pre>@Nonnull
 java.util.concurrent.CompletionStage&lt;java.lang.String&gt;&nbsp;send(@Nonnull
-                                                                     java.util.function.Consumer&lt;javax.mail.internet.MimeMessage&gt;&nbsp;messageAuthor)</pre>
+                                                                     <a href="../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email">MessageEditor</a>&nbsp;messageEditor)</pre>
 <div class="block">Create a completion stage that asynchronously sends an e-mail using the configuration of this e-mail
- service. Before this method returns, the message author argument of this method is passed an empty
- <code>MimeMessage</code> that the <a href="../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><code>EmailSender</code></a> created. The message author shall prepare the message
+ service. Before this method returns, the <a href="../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email"><code>MessageEditor</code></a> passed to this method is invoked with an empty
+ <code>MimeMessage</code> that the <a href="../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><code>EmailSender</code></a> created. The <a href="../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email"><code>MessageEditor</code></a> shall prepare the message
  so it can be sent. Sending will happen asynchronously, though.
- <p>
+ <h1>Usage</h1>
  Refer to the <a href="https://javamail.java.net/nonav/docs/api/">Java Mail JavaDoc</a> and the
  <a href="http://javamail.java.net/nonav/docs/JavaMail-1.5.pdf">Java Mail Specification</a> on how to configure
  instances of <code>MimeMessage</code>. The following code shows a simple example.
@@ -187,17 +187,49 @@ java.util.concurrent.CompletionStage&lt;java.lang.String&gt;&nbsp;send(@Nonnull
  <pre><code>
  String messageID = completionStage.toCompletableFuture().join();
  </code></pre>
- Exceptions that occur while sending the email are instances of <a href="../../../../io/commercetools/sunrise/email/EmailSenderException.html" title="class in io.commercetools.sunrise.email"><code>EmailSenderException</code></a> that are
- wrapped in an unchecked <code>CompletionException</code> thrown by <code>CompletableFuture.join()</code>.
- <p>Implementations of this method need to apply timeouts that may be configured when creating the <a href="../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><code>EmailSender</code></a>
- instance. The timeouts avoid denial of service by too many connections waiting for stalled I/O.</p></div>
+ <h1>Exception handling</h1>
+ Exceptions that occur while sending the email are instances of <a href="../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><code>EmailDeliveryException</code></a> that are contained
+ in the <code>CompletionStage</code> returned by this method. (Note that it is possible that other
+ <code>RuntimeException</code>s or <code>Error</code>s besides <a href="../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><code>EmailDeliveryException</code></a> may be contained in the
+ <code>CompletionStage</code>.) If <code>CompletableFuture.join()</code> is invoked like in
+ above snippet, any <a href="../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><code>EmailDeliveryException</code></a> raised while sending the email is wrapped in a
+ <code>CompletionException</code> thrown by <code>CompletableFuture.join()</code>.
+ <p>
+ Exceptions that occur while creating an email are instances of <a href="../../../../io/commercetools/sunrise/email/EmailCreationException.html" title="class in io.commercetools.sunrise.email"><code>EmailCreationException</code></a> that are thrown
+ by <a href="../../../../io/commercetools/sunrise/email/EmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-"><code>send(MessageEditor)</code></a>.
+ <p>
+ If desired, both kinds of exceptions can be handled like in the following
+ snippet, without requiring the use <code>CompletableFuture.join()</code>.
+ <pre><code>
+ try {
+      emailSender.send(...)
+          .exceptionally(throwable -&gt; {
+              if (throwable instanceof EmailDeliveryException) {
+                  // handle the EmailDeliveryException
+              }
+              ...
+          });
+ } catch (EmailCreationException e) {
+      // handle the EmailCreationException
+ }
+ </code></pre>
+ <h1>A note to implementors</h1>
+ Implementations of this method need to apply timeouts that may be configured when creating the <a href="../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><code>EmailSender</code></a>
+ instance. The timeouts avoid denial of service by too many connections waiting for stalled I/O.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>messageAuthor</code> - a consumer that fills the empty message created by the email sender.
-                      Note that <code>MimeMessage</code> instances are not immutable. Messages passed to the consumer
-                      must only be used by that consumer instance and must not be passed elsewhere.</dd>
+<dd><code>messageEditor</code> - the email sender passes an empty message to the message editor that the editor shall fill.
+                      Note that <code>MimeMessage</code> instances are not immutable. Messages passed to the editor
+                      must only be used by that editor instance and must not be passed elsewhere.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>A completion stage for sending the message asynchronously.</dd>
+<dd>A completion stage containing a string identifying the delivered email, or a
+ <a href="../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><code>EmailDeliveryException</code></a> if the email could not be sent successfully. (Note that it is possible that other
+ <code>RuntimeException</code>s or <code>Error</code>s besides <a href="../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><code>EmailDeliveryException</code></a> may be contained in the
+ <code>CompletionStage</code>.)</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../../../io/commercetools/sunrise/email/EmailCreationException.html" title="class in io.commercetools.sunrise.email">EmailCreationException</a></code> - if there was an error while creating or filling the message. Note that in contrast
+                                <a href="../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><code>EmailDeliveryException</code></a>s raised while sending the e-mail are accessible via
+                                the returned <code>CompletionStage</code>. Also see above note on exceptions.</dd>
 </dl>
 </li>
 </ul>
@@ -228,7 +260,7 @@ java.util.concurrent.CompletionStage&lt;java.lang.String&gt;&nbsp;send(@Nonnull
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../io/commercetools/sunrise/email/EmailSenderException.html" title="class in io.commercetools.sunrise.email"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

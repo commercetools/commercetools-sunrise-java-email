@@ -67,19 +67,61 @@
 <!--   -->
 </a></div>
 <!-- ========= END OF TOP NAVBAR ========= -->
-<div class="contentContainer"><a href="#I:E">E</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a name="I:E">
+<div class="contentContainer"><a href="#I:C">C</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a name="I:C">
+<!--   -->
+</a>
+<h2 class="title">C</h2>
+<dl>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#createAndFillMessage-io.commercetools.sunrise.email.MessageEditor-">createAndFillMessage(MessageEditor)</a></span> - Method in class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">SmtpAuthEmailSender</a></dt>
+<dd>
+<div class="block">Creates a new <code>MimeMessage</code> and passes it to the given <a href="io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email"><code>MessageEditor</code></a> that fills the message.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#createSession-java.util.Properties-io.commercetools.sunrise.email.smtp.SmtpConfiguration-">createSession(Properties, SmtpConfiguration)</a></span> - Method in class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">SmtpAuthEmailSender</a></dt>
+<dd>
+<div class="block">Creates a new <code>Session</code> with an <code>Authenticator</code> that will be used to log into the SMTP server.</div>
+</dd>
+</dl>
+<a name="I:E">
 <!--   -->
 </a>
 <h2 class="title">E</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/MessageEditor.html#edit-javax.mail.internet.MimeMessage-">edit(MimeMessage)</a></span> - Method in interface io.commercetools.sunrise.email.<a href="io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email">MessageEditor</a></dt>
+<dd>
+<div class="block">Implementations of this method modify the given message.</div>
+</dd>
+<dt><a href="io/commercetools/sunrise/email/EmailCreationException.html" title="class in io.commercetools.sunrise.email"><span class="typeNameLink">EmailCreationException</span></a> - Exception in <a href="io/commercetools/sunrise/email/package-summary.html">io.commercetools.sunrise.email</a></dt>
+<dd>
+<div class="block">An unchecked exception signalling that an e-mail could not be created or not be modified by a <a href="io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email"><code>MessageEditor</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/EmailCreationException.html#EmailCreationException-java.lang.String-">EmailCreationException(String)</a></span> - Constructor for exception io.commercetools.sunrise.email.<a href="io/commercetools/sunrise/email/EmailCreationException.html" title="class in io.commercetools.sunrise.email">EmailCreationException</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/EmailCreationException.html#EmailCreationException-java.lang.String-java.lang.Throwable-">EmailCreationException(String, Throwable)</a></span> - Constructor for exception io.commercetools.sunrise.email.<a href="io/commercetools/sunrise/email/EmailCreationException.html" title="class in io.commercetools.sunrise.email">EmailCreationException</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/EmailCreationException.html#EmailCreationException-java.lang.Throwable-">EmailCreationException(Throwable)</a></span> - Constructor for exception io.commercetools.sunrise.email.<a href="io/commercetools/sunrise/email/EmailCreationException.html" title="class in io.commercetools.sunrise.email">EmailCreationException</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/EmailCreationException.html#EmailCreationException-java.lang.String-java.lang.Throwable-boolean-boolean-">EmailCreationException(String, Throwable, boolean, boolean)</a></span> - Constructor for exception io.commercetools.sunrise.email.<a href="io/commercetools/sunrise/email/EmailCreationException.html" title="class in io.commercetools.sunrise.email">EmailCreationException</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><span class="typeNameLink">EmailDeliveryException</span></a> - Exception in <a href="io/commercetools/sunrise/email/package-summary.html">io.commercetools.sunrise.email</a></dt>
+<dd>
+<div class="block">An unchecked exception signalling that an e-mail could not be sent due to issues that arose from
+ either the e-mail itself or from the e-mail infrastructure.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/EmailDeliveryException.html#EmailDeliveryException-java.lang.String-">EmailDeliveryException(String)</a></span> - Constructor for exception io.commercetools.sunrise.email.<a href="io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email">EmailDeliveryException</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/EmailDeliveryException.html#EmailDeliveryException-java.lang.String-java.lang.Throwable-">EmailDeliveryException(String, Throwable)</a></span> - Constructor for exception io.commercetools.sunrise.email.<a href="io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email">EmailDeliveryException</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/EmailDeliveryException.html#EmailDeliveryException-java.lang.Throwable-">EmailDeliveryException(Throwable)</a></span> - Constructor for exception io.commercetools.sunrise.email.<a href="io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email">EmailDeliveryException</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/EmailDeliveryException.html#EmailDeliveryException-java.lang.String-java.lang.Throwable-boolean-boolean-">EmailDeliveryException(String, Throwable, boolean, boolean)</a></span> - Constructor for exception io.commercetools.sunrise.email.<a href="io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email">EmailDeliveryException</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><span class="typeNameLink">EmailSender</span></a> - Interface in <a href="io/commercetools/sunrise/email/package-summary.html">io.commercetools.sunrise.email</a></dt>
 <dd>
 <div class="block">A service for sending e-mails.</div>
 </dd>
 <dt><a href="io/commercetools/sunrise/email/EmailSenderException.html" title="class in io.commercetools.sunrise.email"><span class="typeNameLink">EmailSenderException</span></a> - Exception in <a href="io/commercetools/sunrise/email/package-summary.html">io.commercetools.sunrise.email</a></dt>
 <dd>
-<div class="block">An unchecked exception signalling that an e-mail could not be sent due to issues that arise from either the e-mail itself
- or from the e-mail infrastructure.</div>
+<div class="block">An abstract base class for unchecked exception signalling issues related to an <a href="io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><code>EmailSender</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/EmailSenderException.html#EmailSenderException-java.lang.String-">EmailSenderException(String)</a></span> - Constructor for exception io.commercetools.sunrise.email.<a href="io/commercetools/sunrise/email/EmailSenderException.html" title="class in io.commercetools.sunrise.email">EmailSenderException</a></dt>
 <dd>&nbsp;</dd>
@@ -95,10 +137,25 @@
 </a>
 <h2 class="title">G</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html#getHost--">getHost()</a></span> - Method in class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp">SmtpConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html#getPassword--">getPassword()</a></span> - Method in class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp">SmtpConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html#getPort--">getPort()</a></span> - Method in class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp">SmtpConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html#getTransportSecurity--">getTransportSecurity()</a></span> - Method in class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp">SmtpConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html#getUsername--">getUsername()</a></span> - Method in class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp">SmtpConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/commercetools/sunrise/email/smtp/GmailSmtpEmailSender.html" title="class in io.commercetools.sunrise.email.smtp"><span class="typeNameLink">GmailSmtpEmailSender</span></a> - Class in <a href="io/commercetools/sunrise/email/smtp/package-summary.html">io.commercetools.sunrise.email.smtp</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/GmailSmtpEmailSender.html#GmailSmtpEmailSender--">GmailSmtpEmailSender()</a></span> - Constructor for class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/GmailSmtpEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">GmailSmtpEmailSender</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">An e-mail sender pre-configured for Gmail servers.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/GmailSmtpEmailSender.html#GmailSmtpEmailSender-java.lang.String-java.lang.String-java.util.concurrent.Executor-int-">GmailSmtpEmailSender(String, String, Executor, int)</a></span> - Constructor for class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/GmailSmtpEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">GmailSmtpEmailSender</a></dt>
+<dd>
+<div class="block">Create an e-mail sender that connects to smtp.gmail.com:587 using (and requiring)
+ <a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.TransportSecurity.html#STARTTLS"><code>STARTTLS</code></a> security.</div>
+</dd>
 </dl>
 <a name="I:I">
 <!--   -->
@@ -110,26 +167,81 @@
 <dt><a href="io/commercetools/sunrise/email/smtp/package-summary.html">io.commercetools.sunrise.email.smtp</a> - package io.commercetools.sunrise.email.smtp</dt>
 <dd>&nbsp;</dd>
 </dl>
+<a name="I:M">
+<!--   -->
+</a>
+<h2 class="title">M</h2>
+<dl>
+<dt><a href="io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email"><span class="typeNameLink">MessageEditor</span></a> - Interface in <a href="io/commercetools/sunrise/email/package-summary.html">io.commercetools.sunrise.email</a></dt>
+<dd>
+<div class="block">A functional interface for modifying a message without needing to handle checked exceptions like the
+ <code>MessagingException</code>s thrown by <code>MimeMessage</code>.</div>
+</dd>
+</dl>
+<a name="I:P">
+<!--   -->
+</a>
+<h2 class="title">P</h2>
+<dl>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#properties-java.util.Properties-">properties(Properties)</a></span> - Method in class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">SmtpAuthEmailSender</a></dt>
+<dd>
+<div class="block">This method does nothing by default but may be overridden to customize the configuration of the Java Mail API
+ used by this e-mail sender.</div>
+</dd>
+</dl>
 <a name="I:S">
 <!--   -->
 </a>
 <h2 class="title">S</h2>
 <dl>
-<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/EmailSender.html#send-java.util.function.Consumer-">send(Consumer&lt;MimeMessage&gt;)</a></span> - Method in interface io.commercetools.sunrise.email.<a href="io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email">EmailSender</a></dt>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/EmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-">send(MessageEditor)</a></span> - Method in interface io.commercetools.sunrise.email.<a href="io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email">EmailSender</a></dt>
 <dd>
 <div class="block">Create a completion stage that asynchronously sends an e-mail using the configuration of this e-mail
  service.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#send-java.util.function.Consumer-">send(Consumer&lt;MimeMessage&gt;)</a></span> - Method in class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">SmtpAuthEmailSender</a></dt>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-">send(MessageEditor)</a></span> - Method in class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">SmtpAuthEmailSender</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#sendMessage-javax.mail.internet.MimeMessage-">sendMessage(MimeMessage)</a></span> - Method in class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">SmtpAuthEmailSender</a></dt>
+<dd>
+<div class="block">Sends the given message to the configured SMTP server.</div>
+</dd>
 <dt><a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp"><span class="typeNameLink">SmtpAuthEmailSender</span></a> - Class in <a href="io/commercetools/sunrise/email/smtp/package-summary.html">io.commercetools.sunrise.email.smtp</a></dt>
 <dd>
-<div class="block">An e-mail sender that sends e-mail over SMTP using the default implementation of the Java Mail API.</div>
+<div class="block">An e-mail sender that asynchronously sends e-mail via SMTP over TLS using the default implementation of the Java Mail API.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#SmtpAuthEmailSender-java.util.Properties-">SmtpAuthEmailSender(Properties)</a></span> - Constructor for class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">SmtpAuthEmailSender</a></dt>
-<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#SmtpAuthEmailSender-io.commercetools.sunrise.email.smtp.SmtpConfiguration-java.util.concurrent.Executor-int-">SmtpAuthEmailSender(SmtpConfiguration, Executor, int)</a></span> - Constructor for class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">SmtpAuthEmailSender</a></dt>
+<dd>
+<div class="block">Create a new instance using the given executor and configuration.</div>
+</dd>
+<dt><a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp"><span class="typeNameLink">SmtpConfiguration</span></a> - Class in <a href="io/commercetools/sunrise/email/smtp/package-summary.html">io.commercetools.sunrise.email.smtp</a></dt>
+<dd>
+<div class="block">Instances of this class specify how to connect to an SMTP server with a username and password.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html#SmtpConfiguration-java.lang.String-int-io.commercetools.sunrise.email.smtp.SmtpConfiguration.TransportSecurity-java.lang.String-java.lang.String-">SmtpConfiguration(String, int, SmtpConfiguration.TransportSecurity, String, String)</a></span> - Constructor for class io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp">SmtpConfiguration</a></dt>
+<dd>
+<div class="block">Create a configuration that specifies how to connect to an SMTP server with the given username and password.</div>
+</dd>
+<dt><a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.TransportSecurity.html" title="enum in io.commercetools.sunrise.email.smtp"><span class="typeNameLink">SmtpConfiguration.TransportSecurity</span></a> - Enum in <a href="io/commercetools/sunrise/email/smtp/package-summary.html">io.commercetools.sunrise.email.smtp</a></dt>
+<dd>
+<div class="block">How to secure the connection to an SMTP server.</div>
+</dd>
 </dl>
-<a href="#I:E">E</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:S">S</a>&nbsp;</div>
+<a name="I:V">
+<!--   -->
+</a>
+<h2 class="title">V</h2>
+<dl>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.TransportSecurity.html#valueOf-java.lang.String-">valueOf(String)</a></span> - Static method in enum io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.TransportSecurity.html" title="enum in io.commercetools.sunrise.email.smtp">SmtpConfiguration.TransportSecurity</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this type with the specified name.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.TransportSecurity.html#values--">values()</a></span> - Static method in enum io.commercetools.sunrise.email.smtp.<a href="io/commercetools/sunrise/email/smtp/SmtpConfiguration.TransportSecurity.html" title="enum in io.commercetools.sunrise.email.smtp">SmtpConfiguration.TransportSecurity</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum type, in
+the order they are declared.</div>
+</dd>
+</dl>
+<a href="#I:C">C</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;</div>
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
 <div class="bottomNav"><a name="navbar.bottom">
 <!--   -->

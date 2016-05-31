@@ -112,6 +112,7 @@
 <br>
 <pre>public class <span class="typeNameLabel">GmailSmtpEmailSender</span>
 extends <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">SmtpAuthEmailSender</a></pre>
+<div class="block">An e-mail sender pre-configured for Gmail servers.</div>
 </li>
 </ul>
 </div>
@@ -130,7 +131,13 @@ extends <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmai
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../io/commercetools/sunrise/email/smtp/GmailSmtpEmailSender.html#GmailSmtpEmailSender--">GmailSmtpEmailSender</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../io/commercetools/sunrise/email/smtp/GmailSmtpEmailSender.html#GmailSmtpEmailSender-java.lang.String-java.lang.String-java.util.concurrent.Executor-int-">GmailSmtpEmailSender</a></span>(java.lang.String&nbsp;username,
+                    java.lang.String&nbsp;password,
+                    java.util.concurrent.Executor&nbsp;executor,
+                    int&nbsp;timeoutMs)</code>
+<div class="block">Create an e-mail sender that connects to smtp.gmail.com:587 using (and requiring)
+ <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpConfiguration.TransportSecurity.html#STARTTLS"><code>SmtpConfiguration.TransportSecurity.STARTTLS</code></a> security.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -146,7 +153,7 @@ extends <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmai
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;io.commercetools.sunrise.email.smtp.<a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp">SmtpAuthEmailSender</a></h3>
-<code><a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#send-java.util.function.Consumer-">send</a></code></li>
+<code><a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#createAndFillMessage-io.commercetools.sunrise.email.MessageEditor-">createAndFillMessage</a>, <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#createSession-java.util.Properties-io.commercetools.sunrise.email.smtp.SmtpConfiguration-">createSession</a>, <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#properties-java.util.Properties-">properties</a>, <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-">send</a>, <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#sendMessage-javax.mail.internet.MimeMessage-">sendMessage</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -169,13 +176,37 @@ extends <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmai
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GmailSmtpEmailSender--">
+<a name="GmailSmtpEmailSender-java.lang.String-java.lang.String-java.util.concurrent.Executor-int-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GmailSmtpEmailSender</h4>
-<pre>public&nbsp;GmailSmtpEmailSender()</pre>
+<pre>public&nbsp;GmailSmtpEmailSender(@Nonnull
+                            java.lang.String&nbsp;username,
+                            @Nonnull
+                            java.lang.String&nbsp;password,
+                            @Nonnull
+                            java.util.concurrent.Executor&nbsp;executor,
+                            int&nbsp;timeoutMs)</pre>
+<div class="block">Create an e-mail sender that connects to smtp.gmail.com:587 using (and requiring)
+ <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpConfiguration.TransportSecurity.html#STARTTLS"><code>SmtpConfiguration.TransportSecurity.STARTTLS</code></a> security.
+ <p>
+ See <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#SmtpAuthEmailSender-io.commercetools.sunrise.email.smtp.SmtpConfiguration-java.util.concurrent.Executor-int-"><code>SmtpAuthEmailSender.SmtpAuthEmailSender(SmtpConfiguration, Executor, int)</code></a>
+ for details on how to configure this service.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>username</code> - the complete Gmail e-mail address</dd>
+<dd><code>password</code> - the Gmail password</dd>
+<dd><code>executor</code> - the executor to use, e.g. <code>ForkJoinPool.commonPool()</code> may be used,
+                  but see <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#SmtpAuthEmailSender-io.commercetools.sunrise.email.smtp.SmtpConfiguration-java.util.concurrent.Executor-int-"><code>SmtpAuthEmailSender.SmtpAuthEmailSender(SmtpConfiguration, Executor, int)</code></a>
+                  for details</dd>
+<dd><code>timeoutMs</code> - the timeout for creating, reading from and writing to SMTP connections in
+                  milliseconds. To try out <a href="../../../../../io/commercetools/sunrise/email/smtp/GmailSmtpEmailSender.html" title="class in io.commercetools.sunrise.email.smtp"><code>GmailSmtpEmailSender</code></a> for a low to moderate traffic site,
+                  10*1000ms might fit. But see
+                  <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#SmtpAuthEmailSender-io.commercetools.sunrise.email.smtp.SmtpConfiguration-java.util.concurrent.Executor-int-"><code>SmtpAuthEmailSender.SmtpAuthEmailSender(SmtpConfiguration, Executor, int)</code></a> on what to
+                  consider when choosing a timeout for use in a production environment.</dd>
+</dl>
 </li>
 </ul>
 </li>

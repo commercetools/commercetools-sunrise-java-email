@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -48,7 +48,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../io/commercetools/sunrise/email/smtp/GmailSmtpEmailSender.html" title="class in io.commercetools.sunrise.email.smtp"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li>Next&nbsp;Class</li>
+<li><a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" target="_top">Frames</a></li>
@@ -118,7 +118,20 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">SmtpAuthEmailSender</span>
 extends java.lang.Object
 implements <a href="../../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email">EmailSender</a></pre>
-<div class="block">An e-mail sender that sends e-mail over SMTP using the default implementation of the Java Mail API.</div>
+<div class="block">An e-mail sender that asynchronously sends e-mail via SMTP over TLS using the default implementation of the Java Mail API.
+ <h1>Logging</h1>
+ This class does not log on its own. I relies on logging performed by the Java Mail API instead.
+ The underlying Java Mail API uses <code>Logger</code>s. See <code>LogManager</code> on how
+ to configure these kinds of loggers, in case you need fine-grained control over logging. In general the log output
+ of the Java Mail API is helpful for development and debugging. For such purposes debug-level log output can be
+ obtained by setting the <code>mail.debug</code> property to <code>true</code>. See the
+ <a href="http://www.oracle.com/technetwork/java/faq-135477.html#debug">Java Mail API FAQ</a> for details on how to
+ debug the Java Mail API and other related technologies like SSL that are employed by the Java Mail API.
+ The JavaDoc of the
+ <a href="https://javamail.java.net/nonav/docs/api/index.html?javax/mail/package-summary.html">javax.mail</a>,
+ <a href="https://javamail.java.net/nonav/docs/api/index.html?javax/mail/internet/package-summary.html">javax.mail.internet</a>,
+ <a href="https://javamail.java.net/nonav/docs/api/index.html?com/sun/mail/smtp/package-summary.html">com.sun.mail.smtp</a>,
+ and other packages provide details on log levels.</div>
 </li>
 </ul>
 </div>
@@ -137,7 +150,11 @@ implements <a href="../../../../../io/commercetools/sunrise/email/EmailSender.ht
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#SmtpAuthEmailSender-java.util.Properties-">SmtpAuthEmailSender</a></span>(java.util.Properties&nbsp;properties)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#SmtpAuthEmailSender-io.commercetools.sunrise.email.smtp.SmtpConfiguration-java.util.concurrent.Executor-int-">SmtpAuthEmailSender</a></span>(<a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp">SmtpConfiguration</a>&nbsp;smtpConfiguration,
+                   java.util.concurrent.Executor&nbsp;executor,
+                   int&nbsp;timeoutMs)</code>
+<div class="block">Create a new instance using the given executor and configuration.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -155,10 +172,36 @@ implements <a href="../../../../../io/commercetools/sunrise/email/EmailSender.ht
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>protected javax.mail.internet.MimeMessage</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#createAndFillMessage-io.commercetools.sunrise.email.MessageEditor-">createAndFillMessage</a></span>(<a href="../../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email">MessageEditor</a>&nbsp;messageEditor)</code>
+<div class="block">Creates a new <code>MimeMessage</code> and passes it to the given <a href="../../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email"><code>MessageEditor</code></a> that fills the message.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected javax.mail.Session</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#createSession-java.util.Properties-io.commercetools.sunrise.email.smtp.SmtpConfiguration-">createSession</a></span>(java.util.Properties&nbsp;properties,
+             <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp">SmtpConfiguration</a>&nbsp;smtpConfiguration)</code>
+<div class="block">Creates a new <code>Session</code> with an <code>Authenticator</code> that will be used to log into the SMTP server.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#properties-java.util.Properties-">properties</a></span>(java.util.Properties&nbsp;properties)</code>
+<div class="block">This method does nothing by default but may be overridden to customize the configuration of the Java Mail API
+ used by this e-mail sender.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.util.concurrent.CompletionStage&lt;java.lang.String&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#send-java.util.function.Consumer-">send</a></span>(java.util.function.Consumer&lt;javax.mail.internet.MimeMessage&gt;&nbsp;messageAuthor)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-">send</a></span>(<a href="../../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email">MessageEditor</a>&nbsp;messageEditor)</code>
 <div class="block">Create a completion stage that asynchronously sends an e-mail using the configuration of this e-mail
  service.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#sendMessage-javax.mail.internet.MimeMessage-">sendMessage</a></span>(javax.mail.internet.MimeMessage&nbsp;message)</code>
+<div class="block">Sends the given message to the configured SMTP server.</div>
 </td>
 </tr>
 </table>
@@ -183,14 +226,71 @@ implements <a href="../../../../../io/commercetools/sunrise/email/EmailSender.ht
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="SmtpAuthEmailSender-java.util.Properties-">
+<a name="SmtpAuthEmailSender-io.commercetools.sunrise.email.smtp.SmtpConfiguration-java.util.concurrent.Executor-int-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SmtpAuthEmailSender</h4>
 <pre>public&nbsp;SmtpAuthEmailSender(@Nonnull
-                           java.util.Properties&nbsp;properties)</pre>
+                           <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp">SmtpConfiguration</a>&nbsp;smtpConfiguration,
+                           @Nonnull
+                           java.util.concurrent.Executor&nbsp;executor,
+                           int&nbsp;timeoutMs)</pre>
+<div class="block">Create a new instance using the given executor and configuration. The following example shows how to create an
+ instance of this sender for exploring its functionality. Make sure to read below notes, though.
+ <pre><code>
+ final String yourHost = ...;
+ final int yourPort = ...;
+ // You may need to choose another transport security available for your server.
+ final SmptConfiguration.TransportSecurity security = SmtpConfiguration.TransportSecurity.STARTTLS;
+ final String username = ...;
+ final String password = ...;
+ final SmtpConfiguration smtpConfiguration = new SmtpConfiguration(yourHost, yourPort, security, username, password);
+ final int threeSeconds = 3*1000;
+ final SmtpAuthEmailSender sender = new SmtpAuthEmailSender(smtpConfiguration, ForkJoinPool.commonPool(), threeSeconds);
+ </code></pre>
+ Instances of <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp"><code>SmtpAuthEmailSender</code></a> might be used as exemplified in <a href="../../../../../io/commercetools/sunrise/email/EmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-"><code>EmailSender.send(MessageEditor)</code></a>.
+ <h1>Executor and timeouts</h1>
+ The <code>Executor</code> passed to the constructor enables the sender to send e-mails asynchronously. You may use
+ <code>ForkJoinPool.commonPool()</code>, which uses a pool of <code>N</code> threads, where <code>N</code> is equal to the number
+ of available processors. You may also create a custom <code>ForkJoinPool</code> instance, or another kind of
+ <code>Executor</code>. Note that blocked I/O while sending e-mails will block a pool thread. A fork join pool
+ will also queue tasks while all threads are busy or blocked and offers methods like
+ <code>ForkJoinPool.getQueuedTaskCount()</code> that may be used to monitor the pool at run-time.
+ <p>
+ The constructor also requires a timeout to be specified in milliseconds. If this timeout elapses while the e-mail
+ sender waits to be connected to the SMTP server, waits to read data from the SMTP server, or waits to write data
+ to the SMTP server, an <a href="../../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><code>EmailDeliveryException</code></a> will be raised and sending of the e-mail that caused the
+ issue will be aborted. If this happens before the e-mail has been received by the SMTP server, the e-mail will
+ not be sent, as users of this service will not typically implement error-handling in such cases. In general,
+ shorter timeouts may lead to more messages being lost in the abscence of further error handling, longer timeouts
+ may lead to more tasks being queued if a <code>ForkJoinPool</code> is used as <code>Executor</code>; run-time monitoring of
+ the <code>ForkJoinPool</code> might help choose a suitable timeout value.
+ <h1>Message size</h1>
+ The e-mail sender does not limit the size of the messages it accepts. Because the <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-"><code>send(MessageEditor)</code></a>
+ method fills messages before sending is attempted within the <code>Executor</code>, it is theoretically possible that
+ a large queue of messages waiting to be send consumes all available memory. Users of this API should therefore
+ ensure that messages do not exceed a certain size.
+ <h1>Configuration correctness</h1>
+ Note that this constructor does not fail fast: the constructor does not create a connection to the mail server to
+ ensure that the connection details and credentials are correct. If you would like to ensure a correct
+ configuration, send a test message at startup and decide on your own what to do if that fails.
+ <h1>Shutdown</h1>
+ If the JVM running this e-mail sender is shut down, the <code>Executor</code> passed to this constructor should be
+ shut down, too, in a way that ensures that all messages submitted to <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-"><code>send(MessageEditor)</code></a> have been sent
+ via SMTP - or a timeout expires in the case too many messages are waiting. If a <code>ForkJoinPool</code> is used as
+ <code>Executor</code>, <code>ForkJoinPool.awaitQuiescence(long, TimeUnit)</code> may be used for this purpose.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>smtpConfiguration</code> - how to connect to the SMTP server</dd>
+<dd><code>executor</code> - the executor to use, e.g. <code>ForkJoinPool.commonPool()</code> may be used, but see above</dd>
+<dd><code>timeoutMs</code> - the timeout for creating, reading from and writing to SMTP connections in
+                          milliseconds. To try out <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp"><code>SmtpAuthEmailSender</code></a> for a low to moderate traffic site
+                          with an SMTP server on the local network, the choice of the timeout might not be too
+                          relevant and e.g. 3000ms might fit. But see above on what to consider when choosing a
+                          timeout for use in a production environment.</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -201,21 +301,81 @@ implements <a href="../../../../../io/commercetools/sunrise/email/EmailSender.ht
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="send-java.util.function.Consumer-">
+<a name="createSession-java.util.Properties-io.commercetools.sunrise.email.smtp.SmtpConfiguration-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
+<li class="blockList">
+<h4>createSession</h4>
+<pre>protected&nbsp;javax.mail.Session&nbsp;createSession(@Nonnull
+                                           java.util.Properties&nbsp;properties,
+                                           @Nonnull
+                                           <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp">SmtpConfiguration</a>&nbsp;smtpConfiguration)</pre>
+<div class="block">Creates a new <code>Session</code> with an <code>Authenticator</code> that will be used to log into the SMTP server.
+ <p>
+ This method may be overridden to customize session creation. It is invoked by the
+ <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#SmtpAuthEmailSender-io.commercetools.sunrise.email.smtp.SmtpConfiguration-java.util.concurrent.Executor-int-"><code>SmtpAuthEmailSender(SmtpConfiguration, Executor, int)</code></a> constructor.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>properties</code> - the configuration to be applied in the session</dd>
+<dd><code>smtpConfiguration</code> - how to connect to the SMTP server, incl. the username and password to authenticate with</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the session to obtain messages from</dd>
+</dl>
+</li>
+</ul>
+<a name="properties-java.util.Properties-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>properties</h4>
+<pre>protected&nbsp;void&nbsp;properties(@Nonnull
+                          java.util.Properties&nbsp;properties)</pre>
+<div class="block">This method does nothing by default but may be overridden to customize the configuration of the Java Mail API
+ used by this e-mail sender. The method receives as argument the configuration of the Java Mail API
+ constructed by the invocation of
+ <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#SmtpAuthEmailSender-io.commercetools.sunrise.email.smtp.SmtpConfiguration-java.util.concurrent.Executor-int-"><code>SmtpAuthEmailSender(SmtpConfiguration, Executor, int)</code></a>.
+ <p>
+ Consult the source code of this class before you override this method. The code will help you understand how
+ <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#SmtpAuthEmailSender-io.commercetools.sunrise.email.smtp.SmtpConfiguration-java.util.concurrent.Executor-int-"><code>SmtpAuthEmailSender(SmtpConfiguration, Executor, int)</code></a>
+ creates the properties that are passed to this method.
+ <p>
+ This method may be overridden like in the following example that disables the check of the server identity if
+ <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpConfiguration.TransportSecurity.html#SSL_TLS"><code>SmtpConfiguration.TransportSecurity.SSL_TLS</code></a> or <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpConfiguration.TransportSecurity.html#STARTTLS"><code>SmtpConfiguration.TransportSecurity.STARTTLS</code></a> are
+ used for this <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" title="class in io.commercetools.sunrise.email.smtp"><code>SmtpAuthEmailSender</code></a>. Because the example relaxes security constraints it might only be
+ applied in test setups. Note that properties are always set as strings.
+ <pre><code>
+ protected void properties(final Properties properties) {
+       properties.setProperty("mail.smtp.ssl.checkserveridentity", "" + false);
+ } </code></pre>
+ <p>
+ The Java Mail API offers many configuration properties. The following packages define relevant properties:
+ <a href="https://javamail.java.net/nonav/docs/api/index.html?javax/mail/package-summary.html">javax.mail</a>,
+ <a href="https://javamail.java.net/nonav/docs/api/index.html?javax/mail/internet/package-summary.html">javax.mail.internet</a>, and
+ <a href="https://javamail.java.net/nonav/docs/api/index.html?com/sun/mail/smtp/package-summary.html">com.sun.mail.smtp</a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>properties</code> - the properties for the Java Mail API created from the arguments passed to
+                   <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#SmtpAuthEmailSender-io.commercetools.sunrise.email.smtp.SmtpConfiguration-java.util.concurrent.Executor-int-"><code>SmtpAuthEmailSender(SmtpConfiguration, Executor, int)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a name="send-io.commercetools.sunrise.email.MessageEditor-">
+<!--   -->
+</a>
+<ul class="blockList">
 <li class="blockList">
 <h4>send</h4>
 <pre>@Nonnull
 public&nbsp;java.util.concurrent.CompletionStage&lt;java.lang.String&gt;&nbsp;send(@Nonnull
-                                                                            java.util.function.Consumer&lt;javax.mail.internet.MimeMessage&gt;&nbsp;messageAuthor)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../io/commercetools/sunrise/email/EmailSender.html#send-java.util.function.Consumer-">EmailSender</a></code></span></div>
+                                                                            <a href="../../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email">MessageEditor</a>&nbsp;messageEditor)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../io/commercetools/sunrise/email/EmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-">EmailSender</a></code></span></div>
 <div class="block">Create a completion stage that asynchronously sends an e-mail using the configuration of this e-mail
- service. Before this method returns, the message author argument of this method is passed an empty
- <code>MimeMessage</code> that the <a href="../../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><code>EmailSender</code></a> created. The message author shall prepare the message
+ service. Before this method returns, the <a href="../../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email"><code>MessageEditor</code></a> passed to this method is invoked with an empty
+ <code>MimeMessage</code> that the <a href="../../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><code>EmailSender</code></a> created. The <a href="../../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email"><code>MessageEditor</code></a> shall prepare the message
  so it can be sent. Sending will happen asynchronously, though.
- <p>
+ <h1>Usage</h1>
  Refer to the <a href="https://javamail.java.net/nonav/docs/api/">Java Mail JavaDoc</a> and the
  <a href="http://javamail.java.net/nonav/docs/JavaMail-1.5.pdf">Java Mail Specification</a> on how to configure
  instances of <code>MimeMessage</code>. The following code shows a simple example.
@@ -233,19 +393,93 @@ public&nbsp;java.util.concurrent.CompletionStage&lt;java.lang.String&gt;&nbsp;se
  <pre><code>
  String messageID = completionStage.toCompletableFuture().join();
  </code></pre>
- Exceptions that occur while sending the email are instances of <a href="../../../../../io/commercetools/sunrise/email/EmailSenderException.html" title="class in io.commercetools.sunrise.email"><code>EmailSenderException</code></a> that are
- wrapped in an unchecked <code>CompletionException</code> thrown by <code>CompletableFuture.join()</code>.
- <p>Implementations of this method need to apply timeouts that may be configured when creating the <a href="../../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><code>EmailSender</code></a>
- instance. The timeouts avoid denial of service by too many connections waiting for stalled I/O.</p></div>
+ <h1>Exception handling</h1>
+ Exceptions that occur while sending the email are instances of <a href="../../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><code>EmailDeliveryException</code></a> that are contained
+ in the <code>CompletionStage</code> returned by this method. (Note that it is possible that other
+ <code>RuntimeException</code>s or <code>Error</code>s besides <a href="../../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><code>EmailDeliveryException</code></a> may be contained in the
+ <code>CompletionStage</code>.) If <code>CompletableFuture.join()</code> is invoked like in
+ above snippet, any <a href="../../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><code>EmailDeliveryException</code></a> raised while sending the email is wrapped in a
+ <code>CompletionException</code> thrown by <code>CompletableFuture.join()</code>.
+ <p>
+ Exceptions that occur while creating an email are instances of <a href="../../../../../io/commercetools/sunrise/email/EmailCreationException.html" title="class in io.commercetools.sunrise.email"><code>EmailCreationException</code></a> that are thrown
+ by <a href="../../../../../io/commercetools/sunrise/email/EmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-"><code>EmailSender.send(MessageEditor)</code></a>.
+ <p>
+ If desired, both kinds of exceptions can be handled like in the following
+ snippet, without requiring the use <code>CompletableFuture.join()</code>.
+ <pre><code>
+ try {
+      emailSender.send(...)
+          .exceptionally(throwable -&gt; {
+              if (throwable instanceof EmailDeliveryException) {
+                  // handle the EmailDeliveryException
+              }
+              ...
+          });
+ } catch (EmailCreationException e) {
+      // handle the EmailCreationException
+ }
+ </code></pre>
+ <h1>A note to implementors</h1>
+ Implementations of this method need to apply timeouts that may be configured when creating the <a href="../../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email"><code>EmailSender</code></a>
+ instance. The timeouts avoid denial of service by too many connections waiting for stalled I/O.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../io/commercetools/sunrise/email/EmailSender.html#send-java.util.function.Consumer-">send</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email">EmailSender</a></code></dd>
+<dd><code><a href="../../../../../io/commercetools/sunrise/email/EmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-">send</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../io/commercetools/sunrise/email/EmailSender.html" title="interface in io.commercetools.sunrise.email">EmailSender</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>messageAuthor</code> - a consumer that fills the empty message created by the email sender.
-                      Note that <code>MimeMessage</code> instances are not immutable. Messages passed to the consumer
-                      must only be used by that consumer instance and must not be passed elsewhere.</dd>
+<dd><code>messageEditor</code> - the email sender passes an empty message to the message editor that the editor shall fill.
+                      Note that <code>MimeMessage</code> instances are not immutable. Messages passed to the editor
+                      must only be used by that editor instance and must not be passed elsewhere.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>A completion stage for sending the message asynchronously.</dd>
+<dd>A completion stage containing a string identifying the delivered email, or a
+ <a href="../../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><code>EmailDeliveryException</code></a> if the email could not be sent successfully. (Note that it is possible that other
+ <code>RuntimeException</code>s or <code>Error</code>s besides <a href="../../../../../io/commercetools/sunrise/email/EmailDeliveryException.html" title="class in io.commercetools.sunrise.email"><code>EmailDeliveryException</code></a> may be contained in the
+ <code>CompletionStage</code>.)</dd>
+</dl>
+</li>
+</ul>
+<a name="createAndFillMessage-io.commercetools.sunrise.email.MessageEditor-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createAndFillMessage</h4>
+<pre>protected&nbsp;javax.mail.internet.MimeMessage&nbsp;createAndFillMessage(@Nonnull
+                                                               <a href="../../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email">MessageEditor</a>&nbsp;messageEditor)</pre>
+<div class="block">Creates a new <code>MimeMessage</code> and passes it to the given <a href="../../../../../io/commercetools/sunrise/email/MessageEditor.html" title="interface in io.commercetools.sunrise.email"><code>MessageEditor</code></a> that fills the message.
+ <p>
+ This method may be overridden to customize message creation; it is invoked by <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-"><code>send(MessageEditor)</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>messageEditor</code> - the editor that will be used to fill the empty message created by this method</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the message that is ready for being sent</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../../../../io/commercetools/sunrise/email/EmailCreationException.html" title="class in io.commercetools.sunrise.email">EmailCreationException</a></code> - if there was an error while creating or filling the message</dd>
+</dl>
+</li>
+</ul>
+<a name="sendMessage-javax.mail.internet.MimeMessage-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>sendMessage</h4>
+<pre>protected&nbsp;void&nbsp;sendMessage(@Nonnull
+                           javax.mail.internet.MimeMessage&nbsp;message)
+                    throws javax.mail.MessagingException</pre>
+<div class="block">Sends the given message to the configured SMTP server.
+ <p>
+ This method may be overridden to customize message sending; it is invoked by <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#send-io.commercetools.sunrise.email.MessageEditor-"><code>send(MessageEditor)</code></a>.
+ <p>
+ The implementation of this method uses <code>Transport.send(Message)</code>, which uses the <code>Session</code>
+ configuration from the given message and utilizes one SMTP connection per message. This approach avoids tracking
+ connection state.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>message</code> - the edited message that is ready for being sent</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>javax.mail.MessagingException</code> - may be raised while sending the message. This method does not handle exceptions.
+                            Exceptions are handled by the invoking <a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html#sendMessage-javax.mail.internet.MimeMessage-"><code>sendMessage(MimeMessage)</code></a> method.</dd>
 </dl>
 </li>
 </ul>
@@ -277,7 +511,7 @@ public&nbsp;java.util.concurrent.CompletionStage&lt;java.lang.String&gt;&nbsp;se
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../io/commercetools/sunrise/email/smtp/GmailSmtpEmailSender.html" title="class in io.commercetools.sunrise.email.smtp"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li>Next&nbsp;Class</li>
+<li><a href="../../../../../io/commercetools/sunrise/email/smtp/SmtpConfiguration.html" title="class in io.commercetools.sunrise.email.smtp"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?io/commercetools/sunrise/email/smtp/SmtpAuthEmailSender.html" target="_top">Frames</a></li>
