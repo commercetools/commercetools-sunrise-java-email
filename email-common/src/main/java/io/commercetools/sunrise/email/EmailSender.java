@@ -5,7 +5,6 @@ import javax.mail.internet.MimeMessage;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Consumer;
 
 /**
  * A service for sending e-mails.
@@ -21,10 +20,10 @@ public interface EmailSender {
 
     /**
      * Create a completion stage that asynchronously sends an e-mail using the configuration of this e-mail
-     * service. Before this method returns, the message author argument of this method is passed an empty
-     * {@link MimeMessage} that the {@link EmailSender} created. The message author shall prepare the message
+     * service. Before this method returns, the {@link MessageEditor} passed to this method is invoked with an empty
+     * {@link MimeMessage} that the {@link EmailSender} created. The {@link MessageEditor} shall prepare the message
      * so it can be sent. Sending will happen asynchronously, though.
-     * <p>
+     * <h1>Usage</h1>
      * Refer to the <a href="https://javamail.java.net/nonav/docs/api/">Java Mail JavaDoc</a> and the
      * <a href="http://javamail.java.net/nonav/docs/JavaMail-1.5.pdf">Java Mail Specification</a> on how to configure
      * instances of {@link MimeMessage}. The following code shows a simple example.
@@ -42,17 +41,48 @@ public interface EmailSender {
      * <pre>{@code
      * String messageID = completionStage.toCompletableFuture().join();
      * }</pre>
-     * Exceptions that occur while sending the email are instances of {@link EmailSenderException} that are
-     * wrapped in an unchecked {@link CompletionException} thrown by {@link CompletableFuture#join()}.
-     * <p>Implementations of this method need to apply timeouts that may be configured when creating the {@link EmailSender}
-     * instance. The timeouts avoid denial of service by too many connections waiting for stalled I/O.</p>
+     * <h1>Exception handling</h1>
+     * Exceptions that occur while sending the email are instances of {@link EmailDeliveryException} that are contained
+     * in the {@link CompletionStage} returned by this method. (Note that it is possible that other
+     * {@link RuntimeException}s or {@link Error}s besides {@link EmailDeliveryException} may be contained in the
+     * {@link CompletionStage}.) If {@link CompletableFuture#join()} is invoked like in
+     * above snippet, any {@link EmailDeliveryException} raised while sending the email is wrapped in a
+     * {@link CompletionException} thrown by {@link CompletableFuture#join()}.
+     * <p>
+     * Exceptions that occur while creating an email are instances of {@link EmailCreationException} that are thrown
+     * by {@link #send(MessageEditor)}.
+     * <p>
+     * If desired, both kinds of exceptions can be handled like in the following
+     * snippet, without requiring the use {@link CompletableFuture#join()}.
+     * <pre>{@code
+     * try {
+     *      emailSender.send(...)
+     *          .exceptionally(throwable -> {
+     *              if (throwable instanceof EmailDeliveryException) {
+     *                  // handle the EmailDeliveryException
+     *              }
+     *              ...
+     *          });
+     * } catch (EmailCreationException e) {
+     *      // handle the EmailCreationException
+     * }
+     * }</pre>
+     * <h1>A note to implementors</h1>
+     * Implementations of this method need to apply timeouts that may be configured when creating the {@link EmailSender}
+     * instance. The timeouts avoid denial of service by too many connections waiting for stalled I/O.
      *
-     * @param messageAuthor a consumer that fills the empty message created by the email sender.
-     *                      Note that {@link MimeMessage} instances are not immutable. Messages passed to the consumer
-     *                      must only be used by that consumer instance and must not be passed elsewhere.
-     * @return A completion stage for sending the message asynchronously.
+     * @param messageEditor the email sender passes an empty message to the message editor that the editor shall fill.
+     *                      Note that {@link MimeMessage} instances are not immutable. Messages passed to the editor
+     *                      must only be used by that editor instance and must not be passed elsewhere.
+     * @return A completion stage containing a string identifying the delivered email, or a
+     * {@link EmailDeliveryException} if the email could not be sent successfully. (Note that it is possible that other
+     * {@link RuntimeException}s or {@link Error}s besides {@link EmailDeliveryException} may be contained in the
+     * {@link CompletionStage}.)
+     * @throws EmailCreationException if there was an error while creating or filling the message. Note that in contrast
+     *                                {@link EmailDeliveryException}s raised while sending the e-mail are accessible via
+     *                                the returned {@link CompletionStage}. Also see above note on exceptions.
      */
     @Nonnull
-    CompletionStage<String> send(@Nonnull final Consumer<MimeMessage> messageAuthor);
+    CompletionStage<String> send(@Nonnull final MessageEditor messageEditor);
 
 }

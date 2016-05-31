@@ -51,7 +51,6 @@ lazy val commonSettings = releaseSettings ++ Seq (
 /**
  * TEST SETTINGS
  */
-
 lazy val commonTestSettings = itBaseTestSettings ++ configCommonTestSettings("test,it")
 
 lazy val itBaseTestSettings = Defaults.itSettings ++ configTestDirs(IntegrationTest, "it")
@@ -64,6 +63,7 @@ def configTestDirs(config: Configuration, folderName: String) = Seq(
 
 def configCommonTestSettings(scopes: String) = Seq(
   testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
+  parallelExecution := false, // Many tests start a Greenmail SMTP server on the same port
   libraryDependencies ++= Seq (
     "com.novocode" % "junit-interface" % "0.11" % scopes,
     "org.assertj" % "assertj-core" % "3.4.1" % scopes,
