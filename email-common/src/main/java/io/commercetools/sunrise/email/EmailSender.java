@@ -58,7 +58,7 @@ public interface EmailSender {
      * try {
      *      emailSender.send(...)
      *          .exceptionally(throwable -> {
-     *              if (throwable.getCause() instanceof EmailDeliveryException) {
+     *              if (throwable instanceof EmailDeliveryException) {
      *                  // handle the EmailDeliveryException
      *              }
      *              ...
@@ -74,7 +74,10 @@ public interface EmailSender {
      * @param messageEditor the email sender passes an empty message to the message editor that the editor shall fill.
      *                      Note that {@link MimeMessage} instances are not immutable. Messages passed to the editor
      *                      must only be used by that editor instance and must not be passed elsewhere.
-     * @return A completion stage for sending the message asynchronously.
+     * @return A completion stage containing a string identifying the delivered email, or a
+     * {@link EmailDeliveryException} if the email could not be sent successfully. (Note that it is possible that other
+     * {@link RuntimeException}s or {@link Error}s besides {@link EmailDeliveryException} may be contained in the
+     * {@link CompletionStage}.)
      * @throws EmailCreationException if there was an error while creating or filling the message. Note that in contrast
      *                                {@link EmailDeliveryException}s raised while sending the e-mail are accessible via
      *                                the returned {@link CompletionStage}. Also see above note on exceptions.
