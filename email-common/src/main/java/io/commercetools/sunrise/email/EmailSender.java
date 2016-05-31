@@ -23,7 +23,7 @@ public interface EmailSender {
      * service. Before this method returns, the {@link MessageEditor} passed to this method is invoked with an empty
      * {@link MimeMessage} that the {@link EmailSender} created. The {@link MessageEditor} shall prepare the message
      * so it can be sent. Sending will happen asynchronously, though.
-     * <p>
+     * <h1>Usage</h1>
      * Refer to the <a href="https://javamail.java.net/nonav/docs/api/">Java Mail JavaDoc</a> and the
      * <a href="http://javamail.java.net/nonav/docs/JavaMail-1.5.pdf">Java Mail Specification</a> on how to configure
      * instances of {@link MimeMessage}. The following code shows a simple example.
@@ -41,9 +41,33 @@ public interface EmailSender {
      * <pre>{@code
      * String messageID = completionStage.toCompletableFuture().join();
      * }</pre>
-     * Exceptions that occur while sending the email are instances of {@link EmailSenderException} that are
-     * wrapped in an unchecked {@link CompletionException} thrown by {@link CompletableFuture#join()}.
+     * <h1>Exception handling</h1>
+     * Exceptions that occur while sending the email are instances of {@link EmailDeliveryException} that are contained
+     * in the {@link CompletionStage} returned by this method. (Note that it is possible that other
+     * {@link RuntimeException}s or {@link Error}s besides {@link EmailDeliveryException} may be contained in the
+     * {@link CompletionStage}.) If {@link CompletableFuture#join()} is invoked like in
+     * above snippet, any {@link EmailDeliveryException} raised while sending the email is wrapped in a
+     * {@link CompletionException} thrown by {@link CompletableFuture#join()}.
      * <p>
+     * Exceptions that occur while creating an email are instances of {@link EmailCreationException} that are thrown
+     * by {@link #send(MessageEditor)}.
+     * <p>
+     * If desired, both kinds of exceptions can be handled like in the following
+     * snippet, without requiring the use {@link CompletableFuture#join()}.
+     * <pre>{@code
+     * try {
+     *      emailSender.send(...)
+     *          .exceptionally(throwable -> {
+     *              if (throwable.getCause() instanceof EmailDeliveryException) {
+     *                  // handle the EmailDeliveryException
+     *              }
+     *              ...
+     *          });
+     * } catch (EmailCreationException e) {
+     *      // handle the EmailCreationException
+     * }
+     * }</pre>
+     * <h1>A note to implementors</h1>
      * Implementations of this method need to apply timeouts that may be configured when creating the {@link EmailSender}
      * instance. The timeouts avoid denial of service by too many connections waiting for stalled I/O.</p>
      *
@@ -51,9 +75,9 @@ public interface EmailSender {
      *                      Note that {@link MimeMessage} instances are not immutable. Messages passed to the editor
      *                      must only be used by that editor instance and must not be passed elsewhere.
      * @return A completion stage for sending the message asynchronously.
-     * @throws EmailSenderException if there was an error while creating or filling the message. Note that in contrast
-     *                              {@link EmailSenderException}s raised while sending the e-mail are accessible via
-     *                              the returned {@link CompletionStage}. Also see above note on exceptions.
+     * @throws EmailCreationException if there was an error while creating or filling the message. Note that in contrast
+     *                                {@link EmailDeliveryException}s raised while sending the e-mail are accessible via
+     *                                the returned {@link CompletionStage}. Also see above note on exceptions.
      */
     @Nonnull
     CompletionStage<String> send(@Nonnull final MessageEditor messageEditor);

@@ -4,13 +4,15 @@ import com.icegreen.greenmail.util.DummySSLSocketFactory;
 import com.icegreen.greenmail.util.ServerSetup;
 import com.icegreen.greenmail.util.ServerSetupTest;
 import io.commercetools.sunrise.email.smtp.SmtpAuthEmailSender;
-import io.commercetools.sunrise.email.smtp.SmtpAuthEmailSender.TransportSecurity;
+import io.commercetools.sunrise.email.smtp.SmtpConfiguration;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
+import javax.annotation.Nonnull;
 import java.security.Security;
+import java.util.Properties;
 import java.util.concurrent.Executor;
 
 /**
@@ -38,8 +40,9 @@ public class SSLIntegrationTest {
         final String password = "password";
         final int timeout60Seconds = 60*1000;
         greenMail.setUser(username, password);
-        return new SmtpAuthEmailSender(executor, setup.getBindAddress(), setup.getPort(),
-                TransportSecurity.SSL_TLS, username, password, timeout60Seconds);
+        final SmtpConfiguration smtpConfiguration = new SmtpConfiguration(setup.getBindAddress(), setup.getPort(),
+                SmtpConfiguration.TransportSecurity.SSL_TLS, username, password);
+        return new SmtpAuthEmailSenderThatDoesNotCheckServerIdentity(smtpConfiguration, executor,  timeout60Seconds);
     }
 
     private void installDummySSLSocketFactoriesThatAreRequiredToValidateTheSelfSignedCertificateOfGreenmail() {
@@ -53,5 +56,21 @@ public class SSLIntegrationTest {
     @Test
     public void sendReturnsNonEmptyMessageID() throws Exception {
         TestUtils.testSuccessfulSend(greenMail, sender);
+    }
+
+    private static class SmtpAuthEmailSenderThatDoesNotCheckServerIdentity extends SmtpAuthEmailSender {
+
+        public SmtpAuthEmailSenderThatDoesNotCheckServerIdentity(@Nonnull final SmtpConfiguration smtpConfiguration,
+                                                                 @Nonnull final Executor executor, final int timeoutMs) {
+            super(smtpConfiguration, executor, timeoutMs);
+        }
+
+        @Override
+        protected void properties(@Nonnull final Properties properties) {
+            // The identity of the SMTP server running on the local host cannot be determined
+            // with the self-signed certificate, hence the test disables the default check of the
+            // server identity.
+            properties.setProperty("mail.smtp.ssl.checkserveridentity", "" + false);
+        }
     }
 }

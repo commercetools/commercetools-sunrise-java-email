@@ -1,7 +1,8 @@
 package io.commercetools.sunrise.email.smtp;
 
+import io.commercetools.sunrise.email.EmailCreationException;
+import io.commercetools.sunrise.email.EmailDeliveryException;
 import io.commercetools.sunrise.email.EmailSender;
-import io.commercetools.sunrise.email.EmailSenderException;
 import io.commercetools.sunrise.email.MessageEditor;
 
 import javax.annotation.Nonnull;
@@ -29,33 +30,6 @@ import java.util.concurrent.*;
 public class SmtpAuthEmailSender implements EmailSender {
 
     /**
-     * How to secure the connection to the SMTP server.
-     */
-    public enum TransportSecurity {
-
-        /**
-         * This mode shall only be used for automatic tests. A plain-text connection will be used to communicate to the
-         * server.
-         */
-        None,
-
-        /**
-         * The connection will be established using SSL/TLS right from the start. The service needs to be configured to
-         * connect to the dedicated port at which the server listens for SSL/TLS connections.
-         */
-        SSL_TLS,
-
-        /**
-         * A plain-text connection will be established and be switched to TLS. SMTP servers supporting this mode listen
-         * on a single port only instead of opening a second secured port like in the case of {@link #SSL_TLS}.
-         * The {@link SmtpAuthEmailSender} instance using this transport security will require the switch to TLS and
-         * will not continue if the plain-text connection cannot be switched to TLS.
-         */
-        STARTTLS
-
-    }
-
-    /**
      * The executor used to send messages asynchronously.
      */
     private final Executor executor;
@@ -66,7 +40,20 @@ public class SmtpAuthEmailSender implements EmailSender {
     private final Session session;
 
     /**
-     * Create a new instance using the given executor and configuration.
+     * Create a new instance using the given executor and configuration. The following example shows how to create an
+     * instance of this sender for exploring its functionality. Make sure to read below notes, though.
+     * <pre>{@code
+     * final String yourHost = ...;
+     * final int yourPort = ...;
+     * // You may need to choose another transport security available for your server.
+     * final SmptConfiguration.TransportSecurity security = SmtpConfiguration.TransportSecurity.STARTTLS;
+     * final String username = ...;
+     * final String password = ...;
+     * final SmtpConfiguration smtpConfiguration = new SmtpConfiguration(yourHost, yourPort, security, username, password);
+     * final int threeSeconds = 3*1000;
+     * final SmtpAuthEmailSender sender = new SmtpAuthEmailSender(smtpConfiguration, ForkJoinPool.commonPool(), threeSeconds);
+     * }</pre>
+     * Instances of {@link SmtpAuthEmailSender} might be used as exemplified in {@link EmailSender#send(MessageEditor)}.
      * <h1>Executor and timeouts</h1>
      * The {@link Executor} passed to the constructor enables the sender to send e-mails asynchronously. You may use
      * {@link ForkJoinPool#commonPool()}, which uses a pool of {@code N} threads, where {@code N} is equal to the number
@@ -77,7 +64,7 @@ public class SmtpAuthEmailSender implements EmailSender {
      * <p>
      * The constructor also requires a timeout to be specified in milliseconds. If this timeout elapses while the e-mail
      * sender waits to be connected to the SMTP server, waits to read data from the SMTP server, or waits to write data
-     * to the SMTP server, an {@link EmailSenderException} will be raised and sending of the e-mail that caused the
+     * to the SMTP server, an {@link EmailDeliveryException} will be raised and sending of the e-mail that caused the
      * issue will be aborted. If this happens before the e-mail has been received by the SMTP server, the e-mail will
      * not be sent, as users of this service will not typically implement error-handling in such cases. In general,
      * shorter timeouts may lead to more messages being lost in the abscence of further error handling, longer timeouts
@@ -98,91 +85,74 @@ public class SmtpAuthEmailSender implements EmailSender {
      * via SMTP - or a timeout expires in the case too many messages are waiting. If a {@link ForkJoinPool} is used as
      * {@link Executor}, {@link ForkJoinPool#awaitQuiescence(long, TimeUnit)} may be used for this purpose.
      *
+     * @param smtpConfiguration how to connect to the SMTP server
      * @param executor          the executor to use, e.g. {@link ForkJoinPool#commonPool()} may be used, but see above
-     * @param host              the name of the host running the SMTP server to use
-     * @param port              the port of the SMTP server to use
-     * @param transportSecurity how to secure the SMTP connection
-     * @param username          the username to use for authenticating with the SMTP server
-     * @param password          the password to authenticate with
      * @param timeoutMs         the timeout for creating, reading from and writing to SMTP connections in
-     *                          milliseconds, see above for details
+     *                          milliseconds. To try out {@link SmtpAuthEmailSender} for a low to moderate traffic site
+     *                          with an SMTP server on the local network, the choice of the timeout might not be too
+     *                          relevant and e.g. 3000ms might fit. But see above on what to consider when choosing a
+     *                          timeout for use in a production environment.
      */
-    public SmtpAuthEmailSender(@Nonnull final Executor executor, @Nonnull final String host, final int port,
-                               @Nonnull final TransportSecurity transportSecurity,
-                               @Nonnull final String username, @Nonnull final String password,
+    public SmtpAuthEmailSender(@Nonnull final SmtpConfiguration smtpConfiguration, @Nonnull final Executor executor,
                                final int timeoutMs) {
         this.executor = executor;
-        final Properties properties = createProperties(host, port, transportSecurity, timeoutMs);
-        this.session = createSession(properties, username, password);
+        final Properties properties = createProperties(smtpConfiguration, timeoutMs);
+        properties(properties);
+        this.session = createSession(properties, smtpConfiguration);
     }
 
     /**
      * Creates a new {@link Session} with an {@link Authenticator} that will be used to log into the SMTP server.
      * <p>
      * This method may be overridden to customize session creation. It is invoked by the
-     * {@link #SmtpAuthEmailSender(Executor, String, int, TransportSecurity, String, String, int)} constructor.
+     * {@link #SmtpAuthEmailSender(SmtpConfiguration, Executor, int)} constructor.
      *
-     * @param properties the configuration to be applied in the session
-     * @param username   the username to log into the SMTP server
-     * @param password   the password to log into the SMTP server
+     * @param properties        the configuration to be applied in the session
+     * @param smtpConfiguration how to connect to the SMTP server, incl. the username and password to authenticate with
      * @return the session to obtain messages from
      */
     protected Session createSession(@Nonnull final Properties properties,
-                                    @Nonnull final String username, @Nonnull final String password) {
+                                    @Nonnull final SmtpConfiguration smtpConfiguration) {
 
         return Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
+                return new PasswordAuthentication(smtpConfiguration.getUsername(), smtpConfiguration.getPassword());
             }
         });
     }
 
     /**
      * Creates the properties to configure the {@link Session} that is used to send e-mails.
-     * <p>
-     * This method may be overridden to customize the configuration of the Java Mail API used by this e-mail sender.
-     * This method is invoked by the
-     * {@link #SmtpAuthEmailSender(Executor, String, int, TransportSecurity, String, String, int)} constructor.
-     * <p>
-     * Consult the source code of this method before you override it. You may either replace its implementation or
-     * invoke it in the overriding implementation and adjust the properties set by this method.
-     * <p>
-     * The Java Mail API offers many configuration properties. The following packages define relevant properties:
-     * <a href="https://javamail.java.net/nonav/docs/api/index.html?javax/mail/package-summary.html">javax.mail</a>,
-     * <a href="https://javamail.java.net/nonav/docs/api/index.html?javax/mail/internet/package-summary.html">javax.mail.internet</a>, and
-     * <a href="https://javamail.java.net/nonav/docs/api/index.html?com/sun/mail/smtp/package-summary.html">com.sun.mail.smtp</a>.
      *
-     * @param host              the name of the host at which the SMTP server is available
-     * @param port              the port number at which the SMTP server is listening for incoming connections
-     * @param transportSecurity how to secure the connection to the SMTP server
+     * @param smtpConfiguration how to connect to the SMTP server
      * @param timeoutMs         the timeout for creating, reading from and writing to SMTP connections in
-     *                          milliseconds, see {@link #SmtpAuthEmailSender(Executor, String, int, TransportSecurity, String, String, int)}
+     *                          milliseconds, see {@link #SmtpAuthEmailSender(SmtpConfiguration, Executor, int)}
      *                          for details
      * @return the properties to configure the {@link Session} used by this sender
      */
-    protected Properties createProperties(@Nonnull final String host, final int port,
-                                          @Nonnull final TransportSecurity transportSecurity,
-                                          final int timeoutMs) {
+    private Properties createProperties(@Nonnull final SmtpConfiguration smtpConfiguration,
+                                        final int timeoutMs) {
         final Properties properties = new Properties();
         if (System.getProperty("mail.debug") != null)
             properties.setProperty("mail.debug", System.getProperty("mail.debug"));
-        properties.setProperty("mail.smtp.host", host);
-        properties.setProperty("mail.smtp.port", "" + port);
+        properties.setProperty("mail.smtp.host", smtpConfiguration.getHost());
+        properties.setProperty("mail.smtp.port", "" + smtpConfiguration.getPort());
         properties.setProperty("mail.smtp.auth", "" + true);
         properties.setProperty("mail.smtp.connectiontimeout", "" + timeoutMs);
         properties.setProperty("mail.smtp.timeout", "" + timeoutMs);
         properties.setProperty("mail.smtp.writetimeout", "" + timeoutMs);
-        if (transportSecurity == TransportSecurity.SSL_TLS) {
+        final SmtpConfiguration.TransportSecurity transportSecurity = smtpConfiguration.getTransportSecurity();
+        if (transportSecurity == SmtpConfiguration.TransportSecurity.SSL_TLS) {
             properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             properties.setProperty("mail.smtp.socketFactory.fallback", "false");
-            properties.setProperty("mail.smtp.socketFactory.port", "" + port);
+            properties.setProperty("mail.smtp.socketFactory.port", "" + smtpConfiguration.getPort());
             properties.setProperty("mail.smtp.ssl.checkserveridentity", "" + true);
-        } else if (transportSecurity == TransportSecurity.STARTTLS) {
+        } else if (transportSecurity == SmtpConfiguration.TransportSecurity.STARTTLS) {
             properties.setProperty("mail.smtp.starttls.enable", "" + true);
             properties.setProperty("mail.smtp.starttls.required", "" + true);
             properties.setProperty("mail.smtp.ssl.checkserveridentity", "" + true);
-        } else if (transportSecurity == TransportSecurity.None) {
+        } else if (transportSecurity == SmtpConfiguration.TransportSecurity.None) {
             // No additional configuration required
         } else {
             throw new IllegalArgumentException("Unknown transport security: " + transportSecurity.name());
@@ -190,18 +160,51 @@ public class SmtpAuthEmailSender implements EmailSender {
         return properties;
     }
 
+    /**
+     * This method does nothing by default but may be overridden to customize the configuration of the Java Mail API
+     * used by this e-mail sender. The method receives as argument the configuration of the Java Mail API
+     * constructed by the invocation of
+     * {@link #SmtpAuthEmailSender(SmtpConfiguration, Executor, int)}.
+     * <p>
+     * Consult the source code of this class before you override this method. The code will help you understand how
+     * {@link #SmtpAuthEmailSender(SmtpConfiguration, Executor, int)}
+     * creates the properties that are passed to this method.
+     * <p>
+     * This method may be overridden like in the following example that disables the check of the server identity if
+     * {@link SmtpConfiguration.TransportSecurity#SSL_TLS} or {@link SmtpConfiguration.TransportSecurity#STARTTLS} are
+     * used for this {@link SmtpAuthEmailSender}. Because the example relaxes security constraints it might only be
+     * applied in test setups. Note that properties are always set as strings.
+     * <pre>{@code
+     * protected void properties(final Properties properties) {
+     *       properties.setProperty("mail.smtp.ssl.checkserveridentity", "" + false);
+     * } }</pre>
+     * <p>
+     * The Java Mail API offers many configuration properties. The following packages define relevant properties:
+     * <a href="https://javamail.java.net/nonav/docs/api/index.html?javax/mail/package-summary.html">javax.mail</a>,
+     * <a href="https://javamail.java.net/nonav/docs/api/index.html?javax/mail/internet/package-summary.html">javax.mail.internet</a>, and
+     * <a href="https://javamail.java.net/nonav/docs/api/index.html?com/sun/mail/smtp/package-summary.html">com.sun.mail.smtp</a>.
+     *
+     * @param properties the properties for the Java Mail API created from the arguments passed to
+     *                   {@link #SmtpAuthEmailSender(SmtpConfiguration, Executor, int)}
+     */
+    protected void properties(@Nonnull final Properties properties) {
+    }
+
     @Override
     @Nonnull
     public CompletionStage<String> send(@Nonnull final MessageEditor messageEditor) {
         final MimeMessage message = createAndFillMessage(messageEditor);
-        return CompletableFuture.supplyAsync(() -> {
+        final CompletableFuture<String> result = new CompletableFuture<>();
+        executor.execute(() -> {
             try {
                 sendMessage(message);
-                return message.getMessageID();
-            } catch (Exception e) {
-                throw new EmailSenderException("Failed to send e-mail", e);
+                result.complete(message.getMessageID());
+            } catch (final Throwable t) {//IDE may warn about this, but if fatals are not in the result, it might hang forever
+                EmailDeliveryException wrapper = new EmailDeliveryException("Failed to send e-mail", t);
+                result.completeExceptionally(wrapper);
             }
-        }, executor);
+        });
+        return result;
     }
 
     /**
@@ -211,7 +214,7 @@ public class SmtpAuthEmailSender implements EmailSender {
      *
      * @param messageEditor the editor that will be used to fill the empty message created by this method
      * @return the message that is ready for being sent
-     * @throws EmailSenderException if there was an error while creating or filling the message
+     * @throws EmailCreationException if there was an error while creating or filling the message
      */
     protected MimeMessage createAndFillMessage(@Nonnull final MessageEditor messageEditor) {
         try {
@@ -219,7 +222,7 @@ public class SmtpAuthEmailSender implements EmailSender {
             messageEditor.edit(message);
             return message;
         } catch (Exception e) {
-            throw new EmailSenderException("Failed to create e-mail", e);
+            throw new EmailCreationException("Failed to create e-mail", e);
         }
     }
 

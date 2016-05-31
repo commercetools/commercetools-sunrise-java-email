@@ -1,14 +1,14 @@
 package io.commercetools.sunrise.email;
 
 /**
- * An unchecked exception signalling that an e-mail could not be created or not be sent due to issues that arise from
- * either the e-mail itself or from the e-mail infrastructure.
+ * An abstract base class for unchecked exception signalling issues related to an {@link EmailSender}. See the
+ * sub-classes for specific exceptions.
  * <p>
  * Exceptions of this type will often wrap a lower-level exception.
  *
  * @see Exception#getCause()
  */
-public class EmailSenderException extends RuntimeException {
+public abstract class EmailSenderException extends RuntimeException {
 
     public EmailSenderException(final String message) {
         super(message);

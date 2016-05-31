@@ -2,6 +2,7 @@ import com.icegreen.greenmail.junit.GreenMailRule;
 import com.icegreen.greenmail.util.ServerSetup;
 import com.icegreen.greenmail.util.ServerSetupTest;
 import io.commercetools.sunrise.email.smtp.SmtpAuthEmailSender;
+import io.commercetools.sunrise.email.smtp.SmtpConfiguration;
 import org.junit.Before;
 import org.junit.Rule;
 
@@ -38,8 +39,9 @@ public abstract class AbstractIntegrationTest {
     }
 
     protected SmtpAuthEmailSender createSender(Executor executor) {
-        return new SmtpAuthEmailSender(executor, setup.getBindAddress(), setup.getPort(),
-                SmtpAuthEmailSender.TransportSecurity.None, USERNAME, "foo", TIMEOUT_60_SECONDS);
+        final SmtpConfiguration smtpConfiguration = new SmtpConfiguration(setup.getBindAddress(), setup.getPort(),
+                SmtpConfiguration.TransportSecurity.None, USERNAME, "foo");
+        return new SmtpAuthEmailSender(smtpConfiguration, executor, TIMEOUT_60_SECONDS);
     }
 
 }

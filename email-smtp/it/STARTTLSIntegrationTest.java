@@ -1,9 +1,9 @@
 import com.icegreen.greenmail.junit.GreenMailRule;
 import com.icegreen.greenmail.util.ServerSetup;
 import com.icegreen.greenmail.util.ServerSetupTest;
-import io.commercetools.sunrise.email.EmailSenderException;
+import io.commercetools.sunrise.email.EmailDeliveryException;
 import io.commercetools.sunrise.email.smtp.SmtpAuthEmailSender;
-import io.commercetools.sunrise.email.smtp.SmtpAuthEmailSender.TransportSecurity;
+import io.commercetools.sunrise.email.smtp.SmtpConfiguration;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,15 +31,17 @@ public class STARTTLSIntegrationTest {
         final String password = "password";
         final int timeout60Seconds = 60*1000;
         greenMail.setUser(username, password);
-        return new SmtpAuthEmailSender(executor, setup.getBindAddress(), setup.getPort(),
-                TransportSecurity.STARTTLS, username, password, timeout60Seconds);
+        final SmtpConfiguration smtpConfiguration = new SmtpConfiguration(setup.getBindAddress(), setup.getPort(),
+                SmtpConfiguration.TransportSecurity.STARTTLS, username, password);
+        return new SmtpAuthEmailSender(smtpConfiguration, executor,
+                timeout60Seconds);
     }
 
     @Test
     public void abortConnectionIfServerDoesNotSupportSTARTTLS() throws Exception {
         // The Greenmail server used for integration-testing does not support STARTTLS.
         assertThatThrownBy(() -> { TestUtils.testSuccessfulSend(greenMail, sender); })
-                .hasCauseInstanceOf(EmailSenderException.class)
+                .hasCauseInstanceOf(EmailDeliveryException.class)
                 .hasStackTraceContaining("STARTTLS is required but host does not support STARTTLS");
     }
 }

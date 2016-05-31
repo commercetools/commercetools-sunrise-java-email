@@ -1,9 +1,11 @@
-import io.commercetools.sunrise.email.EmailSenderException;
+import io.commercetools.sunrise.email.EmailDeliveryException;
 import io.commercetools.sunrise.email.smtp.SmtpAuthEmailSender;
+import io.commercetools.sunrise.email.smtp.SmtpConfiguration;
 import org.junit.Test;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.ServerSocket;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,22 +18,24 @@ public class ConfigurationIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void invalidServerHostnameRaisesException() {
-        final SmtpAuthEmailSender sender = new SmtpAuthEmailSender(executor,
-                "thereIsNoServerByThisName", setup.getPort(),
-                SmtpAuthEmailSender.TransportSecurity.None, USERNAME, PASSWORD, TIMEOUT_60_SECONDS);
+        final SmtpConfiguration smtpConfiguration = new SmtpConfiguration("thereIsNoServerByThisName", setup.getPort(),
+                SmtpConfiguration.TransportSecurity.None, USERNAME, PASSWORD);
+        final SmtpAuthEmailSender sender = new SmtpAuthEmailSender(smtpConfiguration, executor,
+                TIMEOUT_60_SECONDS);
         assertThatThrownBy(() -> { sender.send(TestUtils.validShortEmail()).toCompletableFuture().join(); })
-                .hasCauseInstanceOf(EmailSenderException.class)
+                .hasCauseInstanceOf(EmailDeliveryException.class)
                 .hasStackTraceContaining("java.net.UnknownHostException: thereIsNoServerByThisName");
     }
 
     @Test
     public void invalidServerPortRaisesException() {
         final int invalidPort = 123;
-        final SmtpAuthEmailSender sender = new SmtpAuthEmailSender(executor,
-                setup.getBindAddress(), invalidPort,
-                SmtpAuthEmailSender.TransportSecurity.None, USERNAME, PASSWORD, TIMEOUT_60_SECONDS);
+        final SmtpConfiguration smtpConfiguration = new SmtpConfiguration(setup.getBindAddress(), invalidPort,
+                SmtpConfiguration.TransportSecurity.None, USERNAME, PASSWORD);
+        final SmtpAuthEmailSender sender = new SmtpAuthEmailSender(smtpConfiguration, executor,
+                TIMEOUT_60_SECONDS);
         assertThatThrownBy(() -> { sender.send(TestUtils.validShortEmail()).toCompletableFuture().join(); })
-                .hasCauseInstanceOf(EmailSenderException.class)
+                .hasCauseInstanceOf(EmailDeliveryException.class)
                 .hasStackTraceContaining("java.net.ConnectException: Connection refused");
     }
 
@@ -40,11 +44,12 @@ public class ConfigurationIntegrationTest extends AbstractIntegrationTest {
         final int timeout300Ms = 300;
         final int openPortOnWhichNoConnectionsAreAccepted = 12346;
         try(ServerSocket serverSocket = new ServerSocket(openPortOnWhichNoConnectionsAreAccepted)) {
-            final SmtpAuthEmailSender sender = new SmtpAuthEmailSender(executor,
-                    setup.getBindAddress(), openPortOnWhichNoConnectionsAreAccepted,
-                    SmtpAuthEmailSender.TransportSecurity.None, USERNAME, PASSWORD, timeout300Ms);
+            final SmtpConfiguration smtpConfiguration = new SmtpConfiguration(setup.getBindAddress(),
+                    openPortOnWhichNoConnectionsAreAccepted, SmtpConfiguration.TransportSecurity.None, USERNAME, PASSWORD);
+            final SmtpAuthEmailSender sender = new SmtpAuthEmailSender(smtpConfiguration, executor,
+                    timeout300Ms);
             assertThatThrownBy(() -> { sender.send(TestUtils.validShortEmail()).toCompletableFuture().join(); })
-                    .hasCauseInstanceOf(EmailSenderException.class)
+                    .hasCauseInstanceOf(EmailDeliveryException.class)
                     .hasStackTraceContaining("java.net.SocketTimeoutException: Read timed out");
         }
     }
@@ -56,11 +61,12 @@ public class ConfigurationIntegrationTest extends AbstractIntegrationTest {
         try(ServerSocket serverSocket = new ServerSocket(openPort)) {
             final Thread acceptor = new Thread(accept1ConnectionButDontWriteGreeting(serverSocket));
             acceptor.start();
-            final SmtpAuthEmailSender sender = new SmtpAuthEmailSender(executor,
-                    setup.getBindAddress(), openPort,
-                    SmtpAuthEmailSender.TransportSecurity.None, USERNAME, PASSWORD, timeout300Ms);
+            final SmtpConfiguration smtpConfiguration = new SmtpConfiguration(setup.getBindAddress(), openPort,
+                    SmtpConfiguration.TransportSecurity.None, USERNAME, PASSWORD);
+            final SmtpAuthEmailSender sender = new SmtpAuthEmailSender(smtpConfiguration, executor,
+                    timeout300Ms);
             assertThatThrownBy(() -> { sender.send(TestUtils.validShortEmail()).toCompletableFuture().join(); })
-                    .hasCauseInstanceOf(EmailSenderException.class)
+                    .hasCauseInstanceOf(EmailDeliveryException.class)
                     .hasStackTraceContaining("java.net.SocketTimeoutException: Read timed out");
         }
     }
@@ -77,9 +83,10 @@ public class ConfigurationIntegrationTest extends AbstractIntegrationTest {
     @Test
     public void twoSendersForDifferentPortsDoNotInterfereWithEachOther() throws Exception {
         final int invalidPort = 123;
-        final SmtpAuthEmailSender dysfunctionalSender = new SmtpAuthEmailSender(executor,
-                setup.getBindAddress(), invalidPort,
-                SmtpAuthEmailSender.TransportSecurity.None, USERNAME, PASSWORD, TIMEOUT_60_SECONDS);
+        final SmtpConfiguration smtpConfiguration = new SmtpConfiguration(setup.getBindAddress(), invalidPort,
+                SmtpConfiguration.TransportSecurity.None, USERNAME, PASSWORD);
+        final SmtpAuthEmailSender dysfunctionalSender = new SmtpAuthEmailSender(smtpConfiguration, executor,
+                TIMEOUT_60_SECONDS);
 
         String messageId = sender.send(TestUtils.validShortEmail()).toCompletableFuture().join();
 
@@ -99,7 +106,7 @@ public class ConfigurationIntegrationTest extends AbstractIntegrationTest {
             try {
                 io();
             } catch (IOException e) {
-                throw new IllegalStateException("I/O failed", e);
+                throw new UncheckedIOException("I/O failed", e);
             }
         }
     }

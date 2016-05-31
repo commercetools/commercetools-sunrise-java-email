@@ -37,20 +37,6 @@ public class AsynchronousIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void sendTwoMessagesAsynchronouslyWith1PooledThreadSoThatTheBlockingMessageIsDeliveredFirst() throws Exception {
-        final ForkJoinPool pool = new ForkJoinPool(1);
-        final SmtpAuthEmailSender sender = createSender(pool);
-
-        sender.send(TestUtils.getEditorWith300MsDelay(1)).thenAcceptBoth(
-                sender.send(TestUtils.getEditor(2)),
-                (id1, id2) -> {
-                    assertThat(greenMail.getReceivedMessages())
-                            .extracting("subject")
-                            .containsExactly("Message 1", "Message 2");
-                }).toCompletableFuture().join();
-    }
-
-    @Test
     public void sendTenMessagesAsynchronouslyWith1PooledThreadAsASmallPerformanceTest() {
         final ForkJoinPool pool = new ForkJoinPool(1);
         final SmtpAuthEmailSender mySender = createSender(pool);

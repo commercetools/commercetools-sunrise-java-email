@@ -1,4 +1,4 @@
-import io.commercetools.sunrise.email.EmailSenderException;
+import io.commercetools.sunrise.email.EmailDeliveryException;
 import org.junit.Test;
 
 import javax.mail.Message;
@@ -11,25 +11,25 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class SendingIntegrationTest extends AbstractIntegrationTest {
 
     @Test
-    public void missingRecipientAddressYieldsEmailSenderException() {
+    public void missingRecipientAddressYieldsEmailDeliveryException() {
         assertThatThrownBy(() -> { sender.send(msg -> {}).toCompletableFuture().join(); })
                 .isInstanceOf(CompletionException.class)
-                .hasCauseInstanceOf(EmailSenderException.class)
+                .hasCauseInstanceOf(EmailDeliveryException.class)
                 .hasStackTraceContaining("No recipient addresses");
     }
 
     @Test
-    public void theExceptionallyMethodOfCompletionStageCanBeUsedToHandleEmailSenderException() {
+    public void theExceptionallyMethodOfCompletionStageCanBeUsedToHandleEmailDeliveryException() {
         final String cause = sender.send(msg -> {})
-                .exceptionally(throwable -> throwable.getCause().getClass().getName())
+                .exceptionally(throwable -> throwable.getClass().getName())
                 .toCompletableFuture().join();
-        assertThat(cause).isEqualTo(EmailSenderException.class.getName());
+        assertThat(cause).isEqualTo(EmailDeliveryException.class.getName());
     }
 
     @Test
-    public void missingContentYieldsEmailSenderException() throws Exception {
+    public void missingContentYieldsEmailDeliveryException() throws Exception {
         final Method thisMethod = SendingIntegrationTest.class
-                .getMethod("missingContentYieldsEmailSenderException");
+                .getMethod("missingContentYieldsEmailDeliveryException");
         System.err.println("Note that "+thisMethod.getDeclaringClass().getName()+"."+thisMethod.getName()+"()"
                 +" deliberately raises an IllegalStateException / EOFException in the Greenmail implementation"
                 +" that you're going to see on System.err in the following.");
@@ -38,18 +38,18 @@ public class SendingIntegrationTest extends AbstractIntegrationTest {
             sender.send(msg -> {
                 msg.addRecipients(Message.RecipientType.TO, FOO_BAR_AT_DOMAIN_COM);
             }).toCompletableFuture().join();
-        }).hasCauseInstanceOf(EmailSenderException.class)
+        }).hasCauseInstanceOf(EmailDeliveryException.class)
                 .hasStackTraceContaining("No MimeMessage content");
     }
 
     @Test
-    public void missingSubjectYieldsEmailSenderException() {
+    public void missingSubjectYieldsEmailDeliveryException() {
         assertThatThrownBy(() -> {
             sender.send(msg -> {
                 msg.addRecipients(Message.RecipientType.TO, FOO_BAR_AT_DOMAIN_COM);
                 msg.setText(HELLO_WORLD, "UTF-8");
             }).toCompletableFuture().join();
-        }).hasCauseInstanceOf(EmailSenderException.class)
+        }).hasCauseInstanceOf(EmailDeliveryException.class)
                 .hasStackTraceContaining("451 Requested action aborted: local error in processing");
     }
 
