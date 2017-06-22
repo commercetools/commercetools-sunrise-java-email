@@ -3,7 +3,7 @@ import sbt.Keys._
 
 name := "commercetools-sunrise-email"
 
-organization := "io.commercetools.sunrise"
+organization := "com.commercetools.sunrise.email"
 
 lazy val javaMailVersion = "1.5.5"
 
