@@ -25,12 +25,12 @@ object Release {
         None
     },
     licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-    homepage := Some(url("https://github.com/commercetools/commercetools-sunrise-java")),
+    homepage := Some(url("https://github.com/commercetools/commercetools-sunrise-java-email")),
     pomIncludeRepository := { _ => false },
     pomExtra := (
       <scm>
-        <url>git@github.com:scommercetools/commercetools-sunrise-java.git</url>
-        <connection>scm:git:git@github.com:commercetools/commercetools-sunrise-java.git</connection>
+        <url>git@github.com:commercetools/commercetools-sunrise-java-email.git</url>
+        <connection>scm:git:git@github.com:commercetools/commercetools-sunrise-java-email.git</connection>
       </scm>
         <developers>
           <developer>
