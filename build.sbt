@@ -42,8 +42,9 @@ lazy val `email-smtp` = project
  * COMMON SETTINGS
  */
 
-lazy val commonSettings = releaseSettings ++ Seq (
-  scalaVersion := "2.11.8",
+lazy val commonSettings = Release.publishSettings ++ Seq (
+  autoScalaLibrary := false, //this is a pure Java module, no Scala dependency
+  crossPaths := false, //this is a pure Java module, no Scala version suffix on JARs
   javacOptions in (Compile, doc) := Seq("-quiet", "-notimestamp"),
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 )
@@ -72,19 +73,17 @@ def configCommonTestSettings(scopes: String) = Seq(
 )
 
 /**
- * RELEASE SETTINGS
- */
+  * RELEASE SETTINGS
+  */
 
-lazy val releaseSettings = Seq(
-  releaseProcess := Seq[ReleaseStep](
-    checkSnapshotDependencies,
-    inquireVersions,
-    runTest,
-    setReleaseVersion,
-    commitReleaseVersion,
-    tagRelease,
-    setNextVersion,
-    commitNextVersion,
-    pushChanges
-  )
-)
+publishMavenStyle in ThisBuild := true
+
+publishArtifact in Test in ThisBuild := false
+
+publishTo in ThisBuild <<= version { (v: String) =>
+  val nexus = "https://oss.sonatype.org/"
+  if (v.trim.endsWith("SNAPSHOT"))
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases" at nexus + "service/local/staging/deploy/maven2")
+}
