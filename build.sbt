@@ -12,10 +12,10 @@ lazy val javaMailVersion = "1.5.5"
  */
 
 lazy val `commercetools-sunrise-email` = (project in file("."))
-  .aggregate(`email-common`, `email-smtp`)
+  .aggregate(`email-api`, `email-smtp`)
   .settings(javaUnidocSettings ++ commonSettings : _*)
 
-lazy val `email-common` = project
+lazy val `email-api` = project
   .configs(IntegrationTest)
   .settings(commonSettings ++ commonTestSettings : _*)
   .settings(
@@ -35,7 +35,7 @@ lazy val `email-smtp` = project
       "com.sun.mail" % "dsn" % javaMailVersion withSources()
     )
   )
-  .dependsOn(`email-common`)
+  .dependsOn(`email-api`)
 
 
 /**
