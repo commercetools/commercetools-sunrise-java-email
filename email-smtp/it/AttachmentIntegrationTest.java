@@ -32,6 +32,7 @@ public class AttachmentIntegrationTest extends AbstractIntegrationTest {
             msg.addRecipients(Message.RecipientType.TO, recipient);
             msg.setSubject(subject, "UTF-8");
             msg.setContent(sentContent);
+            return msg;
         }).toCompletableFuture().join();
         final MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
 

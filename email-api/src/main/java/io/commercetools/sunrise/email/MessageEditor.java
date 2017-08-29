@@ -21,5 +21,5 @@ public interface MessageEditor {
      * @param message the message to modify
      * @throws Exception if modification fails
      */
-    void edit(@Nonnull final MimeMessage message) throws Exception;
+    MimeMessage edit(@Nonnull final MimeMessage message) throws Exception;
 }

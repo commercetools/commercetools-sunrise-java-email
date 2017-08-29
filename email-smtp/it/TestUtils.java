@@ -38,6 +38,7 @@ public class TestUtils {
             msg.addRecipients(Message.RecipientType.TO, AbstractIntegrationTest.FOO_BAR_AT_DOMAIN_COM);
             msg.setSubject(AbstractIntegrationTest.TEST, UTF_8);
             msg.setText(AbstractIntegrationTest.HELLO_WORLD, UTF_8);
+            return msg;
         };
     }
 
@@ -48,6 +49,7 @@ public class TestUtils {
                 TestUtils.class.wait(300);
                 getEditor(index).edit(msg);
             }
+            return msg;
         };
     }
 
@@ -74,6 +76,7 @@ public class TestUtils {
             msg.setRecipients(Message.RecipientType.TO, "foo" + index + "@domain.com");
             msg.setSubject("Message " + index, UTF_8);
             msg.setText("Content " + index, UTF_8);
+            return msg;
         };
     }
 }
