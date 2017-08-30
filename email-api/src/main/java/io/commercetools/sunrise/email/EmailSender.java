@@ -34,6 +34,7 @@ public interface EmailSender {
      *      msg.setText("Text", "UTF-8");
      *      msg.setSentDate(new Date());
      *      msg.setRecipients(Message.RecipientType.TO, "bar@domain.com");
+     *      return msg;
      * });
      * }</pre>
      * The {@link CompletionStage} returned by this method may be combined with further completion stages. To directly
