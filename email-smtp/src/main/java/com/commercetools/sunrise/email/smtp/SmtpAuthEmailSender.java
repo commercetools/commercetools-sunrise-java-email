@@ -1,9 +1,9 @@
-package io.commercetools.sunrise.email.smtp;
+package com.commercetools.sunrise.email.smtp;
 
-import io.commercetools.sunrise.email.EmailCreationException;
-import io.commercetools.sunrise.email.EmailDeliveryException;
-import io.commercetools.sunrise.email.EmailSender;
-import io.commercetools.sunrise.email.MessageEditor;
+import com.commercetools.sunrise.email.EmailCreationException;
+import com.commercetools.sunrise.email.EmailDeliveryException;
+import com.commercetools.sunrise.email.EmailSender;
+import com.commercetools.sunrise.email.MessageEditor;
 
 import javax.annotation.Nonnull;
 import javax.mail.*;

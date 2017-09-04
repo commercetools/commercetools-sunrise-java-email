@@ -1,6 +1,7 @@
+package com.commercetools.sunrise.email.smtp;
+
 import com.icegreen.greenmail.junit.GreenMailRule;
-import io.commercetools.sunrise.email.MessageEditor;
-import io.commercetools.sunrise.email.smtp.SmtpAuthEmailSender;
+import com.commercetools.sunrise.email.MessageEditor;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ObjectArrayAssert;
 

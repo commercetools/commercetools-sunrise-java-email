@@ -1,3 +1,5 @@
+package com.commercetools.sunrise.email.smtp;
+
 import org.junit.Test;
 
 import javax.activation.DataHandler;

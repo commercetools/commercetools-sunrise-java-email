@@ -1,8 +1,10 @@
+package com.commercetools.sunrise.email.smtp;
+
 import com.icegreen.greenmail.junit.GreenMailRule;
 import com.icegreen.greenmail.util.ServerSetup;
 import com.icegreen.greenmail.util.ServerSetupTest;
-import io.commercetools.sunrise.email.smtp.SmtpAuthEmailSender;
-import io.commercetools.sunrise.email.smtp.SmtpConfiguration;
+import com.commercetools.sunrise.email.smtp.SmtpAuthEmailSender;
+import com.commercetools.sunrise.email.smtp.SmtpConfiguration;
 import org.junit.Before;
 import org.junit.Rule;
 

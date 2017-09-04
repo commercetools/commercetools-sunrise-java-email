@@ -1,4 +1,5 @@
-import io.commercetools.sunrise.email.smtp.SmtpAuthEmailSender;
+package com.commercetools.sunrise.email.smtp;
+
 import org.junit.Test;
 
 import java.util.List;

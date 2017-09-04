@@ -1,4 +1,4 @@
-package io.commercetools.sunrise.email;
+package com.commercetools.sunrise.email;
 
 /**
  * An unchecked exception signalling that an e-mail could not be created or not be modified by a {@link MessageEditor}.

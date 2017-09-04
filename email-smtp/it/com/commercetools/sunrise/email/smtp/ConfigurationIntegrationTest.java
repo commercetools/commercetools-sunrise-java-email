@@ -1,6 +1,6 @@
-import io.commercetools.sunrise.email.EmailDeliveryException;
-import io.commercetools.sunrise.email.smtp.SmtpAuthEmailSender;
-import io.commercetools.sunrise.email.smtp.SmtpConfiguration;
+package com.commercetools.sunrise.email.smtp;
+
+import com.commercetools.sunrise.email.EmailDeliveryException;
 import org.junit.Test;
 
 import javax.annotation.Nonnull;
