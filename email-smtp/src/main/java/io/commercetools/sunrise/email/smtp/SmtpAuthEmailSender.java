@@ -219,7 +219,8 @@ public class SmtpAuthEmailSender implements EmailSender {
     protected MimeMessage createAndFillMessage(@Nonnull final MessageEditor messageEditor) {
         try {
             MimeMessage message = new MimeMessage(session);
-            return messageEditor.edit(message);
+            messageEditor.edit(message);
+            return message;
         } catch (Exception e) {
             throw new EmailCreationException("Failed to create e-mail", e);
         }

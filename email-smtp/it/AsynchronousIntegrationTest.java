@@ -59,11 +59,10 @@ public class AsynchronousIntegrationTest extends AbstractIntegrationTest {
         private boolean finished = false;
 
         @Override
-        public synchronized MimeMessage edit(@Nonnull final MimeMessage message) throws Exception {
+        public synchronized void edit(@Nonnull final MimeMessage message) throws Exception {
             TestUtils.validShortEmail().edit(message);
             wait(200);
             finished = true;
-            return message;
         }
     }
 

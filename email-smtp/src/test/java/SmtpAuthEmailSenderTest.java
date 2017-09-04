@@ -19,7 +19,7 @@ public class SmtpAuthEmailSenderTest {
         final CheckingExecutor executor = new CheckingExecutor();
         final SmtpAuthEmailSender sender = new SmtpAuthEmailSender(DUMMY_CONFIGURATION, executor, TIMEOUT_60_SECONDS);
 
-        sender.send(msg -> msg);
+        sender.send(msg -> { });
 
         assertThat(executor.hasBeenUsed).isTrue();
     }
