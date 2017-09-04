@@ -12,7 +12,7 @@ public class SendingIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void missingRecipientAddressYieldsEmailDeliveryException() {
-        assertThatThrownBy(() -> { sender.send(msg -> msg).toCompletableFuture().join(); })
+        assertThatThrownBy(() -> { sender.send(msg -> {}).toCompletableFuture().join(); })
                 .isInstanceOf(CompletionException.class)
                 .hasCauseInstanceOf(EmailDeliveryException.class)
                 .hasStackTraceContaining("No recipient addresses");
@@ -20,7 +20,7 @@ public class SendingIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void theExceptionallyMethodOfCompletionStageCanBeUsedToHandleEmailDeliveryException() {
-        final String cause = sender.send(msg -> msg)
+        final String cause = sender.send(msg -> {})
                 .exceptionally(throwable -> throwable.getClass().getName())
                 .toCompletableFuture().join();
         assertThat(cause).isEqualTo(EmailDeliveryException.class.getName());
@@ -37,7 +37,6 @@ public class SendingIntegrationTest extends AbstractIntegrationTest {
         assertThatThrownBy(() -> {
             sender.send(msg -> {
                 msg.addRecipients(Message.RecipientType.TO, FOO_BAR_AT_DOMAIN_COM);
-                return msg;
             }).toCompletableFuture().join();
         }).hasCauseInstanceOf(EmailDeliveryException.class)
                 .hasStackTraceContaining("No MimeMessage content");
@@ -49,7 +48,6 @@ public class SendingIntegrationTest extends AbstractIntegrationTest {
             sender.send(msg -> {
                 msg.addRecipients(Message.RecipientType.TO, FOO_BAR_AT_DOMAIN_COM);
                 msg.setText(HELLO_WORLD, "UTF-8");
-                return msg;
             }).toCompletableFuture().join();
         }).hasCauseInstanceOf(EmailDeliveryException.class)
                 .hasStackTraceContaining("451 Requested action aborted: local error in processing");

@@ -15,12 +15,11 @@ import javax.mail.internet.MimeMessage;
 public interface MessageEditor {
 
     /**
-     * Implementations of this method returns a message, which might or might not be a modification of the source message.
-     * See the JavaDoc of {@link EmailSender#send(MessageEditor)} for an example of a lambda expression that implements this interface.
+     * Implementations of this method modify the given message. See the JavaDoc of
+     * {@link EmailSender#send(MessageEditor)} for an example of a lambda expression that implements this interface.
      *
-     * @param message the source message
-     * @return the new message
+     * @param message the message to modify
      * @throws Exception if modification fails
      */
-    MimeMessage edit(@Nonnull final MimeMessage message) throws Exception;
+    void edit(@Nonnull final MimeMessage message) throws Exception;
 }
