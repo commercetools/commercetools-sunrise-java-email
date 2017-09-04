@@ -1,9 +1,9 @@
-package io.commercetools.sunrise.email.smtp;
+package com.commercetools.sunrise.email.smtp;
 
 import javax.annotation.Nonnull;
 import java.util.concurrent.Executor;
 
-import static io.commercetools.sunrise.email.smtp.SmtpConfiguration.TransportSecurity.STARTTLS;
+import static com.commercetools.sunrise.email.smtp.SmtpConfiguration.TransportSecurity.STARTTLS;
 
 /**
  * An e-mail sender pre-configured for Gmail servers.

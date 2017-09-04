@@ -1,4 +1,4 @@
-package io.commercetools.sunrise.email.smtp;
+package com.commercetools.sunrise.email.smtp;
 
 import javax.annotation.Nonnull;
 import java.util.concurrent.Executor;

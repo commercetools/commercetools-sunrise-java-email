@@ -1,4 +1,4 @@
-package io.commercetools.sunrise.email;
+package com.commercetools.sunrise.email;
 
 /**
  * An abstract base class for unchecked exception signalling issues related to an {@link EmailSender}. See the

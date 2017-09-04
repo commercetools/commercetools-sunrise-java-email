@@ -1,6 +1,8 @@
-import io.commercetools.sunrise.email.EmailCreationException;
-import io.commercetools.sunrise.email.smtp.SmtpAuthEmailSender;
-import io.commercetools.sunrise.email.smtp.SmtpConfiguration;
+package com.commercetools.sunrise.email.smtp;
+
+import com.commercetools.sunrise.email.EmailCreationException;
+import com.commercetools.sunrise.email.smtp.SmtpAuthEmailSender;
+import com.commercetools.sunrise.email.smtp.SmtpConfiguration;
 import org.junit.Test;
 
 import java.util.concurrent.Executor;

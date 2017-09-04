@@ -1,4 +1,4 @@
-package io.commercetools.sunrise.email;
+package com.commercetools.sunrise.email;
 
 import javax.annotation.Nonnull;
 import javax.mail.MessagingException;
