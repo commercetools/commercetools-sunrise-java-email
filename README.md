@@ -2,13 +2,19 @@ Sunrise Java Email :sunrise: :email:
 ==================
 
 [![Build Status](https://travis-ci.org/commercetools/commercetools-sunrise-java-email.svg?branch=master)](https://travis-ci.org/commercetools/commercetools-sunrise-java-email)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.commercetools.sunrise.email/email-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.commercetools.sunrise.email/email-api)
 [![Stories in Ready](https://badge.waffle.io/commercetools/commercetools-sunrise-java-email.svg?label=ready&title=Ready)](https://waffle.io/commercetools/commercetools-sunrise-java-email)
 
 Module for [Sunrise Java](https://github.com/sphereio/commercetools-sunrise-java) with different supported services to send e-mail. 
 
 * [Javadoc](https://commercetools.github.io/commercetools-sunrise-java-email/javadoc/index.html)
 
+# Installation
+Install both the `email-api` and `email-smtp` dependencies in your project.
+
+| Dependency        | Link to Maven Central |
+| ------------ | -------------|
+| email-api    | [![Maven Central email-api](https://maven-badges.herokuapp.com/maven-central/com.commercetools.sunrise.email/email-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.commercetools.sunrise.email/email-api) |
+| email-smtp   | [![Maven Central email-smtp](https://maven-badges.herokuapp.com/maven-central/com.commercetools.sunrise.email/email-smtp/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.commercetools.sunrise.email/email-smtp) |
 
 # Examples
 
